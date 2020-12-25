@@ -42,7 +42,8 @@ public class Hardware {
         front_right= hwMap.dcMotor.get("rightFront");
         back_left = hwMap.dcMotor.get("leftRear");
         back_right = hwMap.dcMotor.get("rightRear");
-        shooter = hwMap.dcMotor.get("shooter");
+        shooter = hwMap.dcMotor.get("frontShooter");
+        wobblegoal = hwMap.dcMotor.get("wobbleArm");
         intake = hwMap.dcMotor.get("intake");
 
 
@@ -79,11 +80,13 @@ public class Hardware {
         period.reset();
 
         // Define Motors
-        front_left = hwMap.dcMotor.get("front_left");
-        front_right = hwMap.dcMotor.get("front_right");
-        back_left = hwMap.dcMotor.get("back_left");
-        back_right = hwMap.dcMotor.get("back_right");
-        shooter = hwMap.dcMotor.get("shooter");
+
+        front_left = hwMap.dcMotor.get("leftFront");
+        front_right= hwMap.dcMotor.get("rightFront");
+        back_left = hwMap.dcMotor.get("leftRear");
+        back_right = hwMap.dcMotor.get("rightRear");
+        shooter = hwMap.dcMotor.get("frontShooter");
+        wobblegoal = hwMap.dcMotor.get("wobbleArm");
         intake = hwMap.dcMotor.get("intake");
 
         // Initialize Motors
@@ -129,11 +132,12 @@ public class Hardware {
         period.reset();
 
         // Define Motors
-        front_left = hwMap.dcMotor.get("front_left");
-        front_right = hwMap.dcMotor.get("front_right");
-        back_left = hwMap.dcMotor.get("back_left");
-        back_right = hwMap.dcMotor.get("back_right");
-        shooter = hwMap.dcMotor.get("shooter");
+        front_left = hwMap.dcMotor.get("leftFront");
+        front_right= hwMap.dcMotor.get("rightFront");
+        back_left = hwMap.dcMotor.get("leftRear");
+        back_right = hwMap.dcMotor.get("rightRear");
+        shooter = hwMap.dcMotor.get("frontShooter");
+        wobblegoal = hwMap.dcMotor.get("wobbleArm");
         intake = hwMap.dcMotor.get("intake");
 
         // Initialize Motors
@@ -142,12 +146,14 @@ public class Hardware {
         back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        wobblegoal.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         front_left.setDirection(DcMotor.Direction.REVERSE);
         front_right.setDirection(DcMotor.Direction.FORWARD);
         back_left.setDirection(DcMotor.Direction.REVERSE);
         back_right.setDirection(DcMotor.Direction.FORWARD);
+        wobblegoal.setDirection(DcMotorSimple.Direction.FORWARD);
         shooter.setDirection(DcMotor.Direction.FORWARD);
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
 
@@ -156,6 +162,7 @@ public class Hardware {
         back_left.setPower(0);
         back_right.setPower(0);
         shooter.setPower(0);
+        wobblegoal.setPower(0);
         intake.setPower(0);
 
         front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

@@ -68,65 +68,13 @@ public class Autonomous_Methods extends LinearOpMode {
         robot.front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-//        int currentPosition = 0;
-//        //RPM for GoBuilda YEllow Jacket planetary gear motors
-//        int targetEncodedValue  = (int) Math.round((distance / (4 * Math.PI)) * 1150);
-//
-//        robot.back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.back_right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//
-//
-//
-//        while (opModeIsActive() && currentPosition <= targetEncodedValue){
-//            currentPosition = robot.back_right.getCurrentPosition();
-//            robot.back_left.setPower(speed);
-//            robot.back_right.setPower(speed);
-//            robot.front_right.setPower(speed);
-//            robot.front_left.setPower(speed);
-//        }
-//
-//        //setting all motor powers to 0 (stopping)
-//        robot.back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
     }
 
     public void backward(double speed, double distance) {
 
 
         //RPM for GoBuilda YEllow Jacket planetary gear motors
-        int counts = (int) ((distance / (4 * Math.PI)) * 1150);
-//        robot.back_left.setTargetPosition(-counts);
-//        robot.back_right.setTargetPosition(-counts);
-//        robot.front_right.setTargetPosition(-counts);
-//        robot.front_left.setTargetPosition(-counts);
-//
-//        //setting all motors to go forward (positive)
-//
-//        robot.back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        robot.back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        robot.front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        robot.front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-//        robot.back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.back_right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//
-//
-//
-//        while (opModeIsActive() && robot.back_right.getCurrentPosition() <= counts){
-//            robot.back_left.setPower(-speed);
-//            robot.back_right.setPower(-speed);
-//            robot.front_right.setPower(-speed);
-//            robot.front_left.setPower(-speed);
-//        }
-//
-//            //setting all motor powers to 0 (stopping)
-//        robot.back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        int counts = (int) ((distance / (4 * Math.PI)) * 3892);
 
         robot.back_left.setTargetPosition(-counts);
         robot.back_right.setTargetPosition(-counts);
@@ -159,7 +107,7 @@ public class Autonomous_Methods extends LinearOpMode {
 
     public void strafeLeft(double speed, double distance) {
 
-        int counts = (int) ((distance / (4 * Math.PI)) * 1150);
+        int counts = (int) ((distance / (4 * Math.PI)) * 3892);
         robot.back_left.setTargetPosition(counts);
         robot.back_right.setTargetPosition(-counts);
         robot.front_right.setTargetPosition(counts);
@@ -191,7 +139,7 @@ public class Autonomous_Methods extends LinearOpMode {
     public void strafeRight(double speed, double distance) {
 
 
-        int counts = (int) ((distance / (4 * Math.PI)) * 1150);
+        int counts = (int) ((distance / (4 * Math.PI)) * 3892);
         robot.back_left.setTargetPosition(-counts);
         robot.back_right.setTargetPosition(counts);
         robot.front_right.setTargetPosition(-counts);
@@ -314,6 +262,14 @@ public class Autonomous_Methods extends LinearOpMode {
 
         robot.intake.setPower(power);
 
+    }
+
+    public void arm (double distance) {
+        robot.wobblegoal.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.wobblegoal.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        int counts = (int) ((distance / (4 * Math.PI)) * 3892);
+        robot.wobblegoal.setTargetPosition(counts);
+        robot.wobblegoal.setPower(0.3);
     }
 
     @Override

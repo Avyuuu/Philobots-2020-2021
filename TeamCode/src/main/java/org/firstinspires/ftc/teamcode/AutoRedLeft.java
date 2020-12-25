@@ -27,7 +27,7 @@ public class AutoRedLeft extends Autonomous_Methods {
             while ((System.currentTimeMillis() - runTime) < 5000) {
                 numberOfRings = visionUtility.getRingStack(this);
                 if((System.currentTimeMillis()- runTime) >2000 && numberOfRings == 0)
-                    forward(0.4, 6);
+                    forward(0.3, 4);
                 if(numberOfRings > 0){
                     break;
                 }
@@ -40,12 +40,13 @@ public class AutoRedLeft extends Autonomous_Methods {
             if (numberOfRings > 0) {
                 if (numberOfRings == 1) {
 
-                    strafeLeft(0.7, 12);
-                    forward(0.7, 57);
-                    sleep(1000); //drop wobble goal
-                    backward(0.7, 18);
+                    strafeLeft(0.5, 12);
+                    forward(0.4, 57);
+                    strafeRight(0.4, 9);
+                    arm(0.3);
+                    forward(0.4, 7);
+                    backward(0.3, 25);
                     strafeRight(0.7, 16);
-                    turn(0.4, 174, "clockwise");
                     sleep(1000); //shoot();
 
                 } else if (numberOfRings == 4) {
@@ -54,16 +55,17 @@ public class AutoRedLeft extends Autonomous_Methods {
                     strafeRight(0.5, 19.5);
                     sleep(1000);//drop wobble goal
                     backward(0.7, 35);
-                    turn(0.4, 174, "clockwise");
                     strafeRight(0.5, 2);
                     sleep(1000); //shoot();
                 }
             } else {
-                forward(0.7, 24);
-                sleep(4000);//drop wobble goal
-                backward(0.7, 5);
-                strafeLeft(0.7, 2);
-                turn(0.4, 174, "clockwise");
+                forward(0.5, 24);
+                strafeRight(0.3, 5);
+                arm(30);
+                sleep(4000);
+                forward(0.3, 8);
+                strafeLeft(0.4, 4);
+                backward(0.5, 12);
                 sleep(1000);//shoot();
             }
             break;
