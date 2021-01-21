@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -18,6 +19,7 @@ public class Hardware {
     public DcMotor back_right = null;
     public DcMotor shooter = null;
     public DcMotor intake = null;
+    public Servo trigger = null;
     public DcMotor wobblegoal = null;
 
 
@@ -53,6 +55,7 @@ public class Hardware {
         back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        wobblegoal.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         front_left.setDirection(DcMotor.Direction.FORWARD);
@@ -60,6 +63,7 @@ public class Hardware {
         back_left.setDirection(DcMotor.Direction.FORWARD);
         back_right.setDirection(DcMotor.Direction.FORWARD);
         shooter.setDirection(DcMotor.Direction.FORWARD);
+        wobblegoal.setDirection(DcMotor.Direction.FORWARD);
         intake.setDirection(DcMotor.Direction.FORWARD);
 
         front_left.setPower(0);
@@ -67,6 +71,7 @@ public class Hardware {
         back_left.setPower(0);
         back_right.setPower(0);
         shooter.setPower(0);
+        wobblegoal.setPower(0);
         intake.setPower(0);
 
 
@@ -138,6 +143,7 @@ public class Hardware {
         back_right = hwMap.dcMotor.get("rightRear");
         shooter = hwMap.dcMotor.get("frontShooter");
         wobblegoal = hwMap.dcMotor.get("wobbleArm");
+        trigger = hwMap.servo.get("trigger");
         intake = hwMap.dcMotor.get("intake");
 
         // Initialize Motors
