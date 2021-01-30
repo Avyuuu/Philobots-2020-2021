@@ -138,10 +138,10 @@ public class mecopmode extends LinearOpMode {
             double lift = gamepad2.left_stick_x;
             double strafe = gamepad1.left_stick_x;
 
-            leftFrontPower = Range.clip(drive + turn + strafe, -0.75, 0.75) ;
-            rightFrontPower   = Range.clip(drive - turn - strafe, -0.75, 0.75) ;
-            rightBackPower   = Range.clip(drive - turn + strafe, -0.75, 0.75) ;
-            leftBackPower   = Range.clip(drive + turn - strafe, -0.75, 0.75) ;
+            leftFrontPower = (drive + turn + strafe) * .75 ;
+            rightFrontPower   = (drive - turn - strafe) * .75  ;
+            rightBackPower   = (drive - turn + strafe) * .75  ;
+            leftBackPower   = (drive + turn - strafe) * .75  ;
             intakePower = Range.clip(goIn-goOut, -.8, .8);
             liftPower = Range.clip(lift,-.2, .2);
 
