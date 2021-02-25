@@ -1,20 +1,14 @@
 package org.firstinspires.ftc.teamcode.Library;
 
-import android.sax.StartElementListener;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.vuforia.CameraDevice;
-import com.vuforia.HINT;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -183,7 +177,7 @@ public class VisionUtility
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfodParameters.minResultConfidence = 0.8f;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.setZoom(2.5, 16.0/9);
+        tfod.setZoom(2, 16.0 / 9);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_QUAD_ELEMENT, LABEL_SINGLE_ELEMENT);
     }
 
@@ -219,42 +213,43 @@ public class VisionUtility
     }
 
     public int getRingStack(OpMode opMode) {
-        Log.i("[Philos]:", String.format("Tfod null:%b", tfod == null));
+        //Log.i("[Philos]:", String.format("Tfod null:%b", tfod == null));
         if (tfod != null) {
             List<Recognition> recognitions = tfod.getUpdatedRecognitions();
 
-            Log.i("[Philos]:", String.format("Recognitions null:%b", recognitions == null));
+            // Log.i("[Philos]:", String.format("Recognitions null:%b", recognitions == null));
             if (recognitions != null) {
                 int i = 0;
-                Log.i("[Philos]:", String.format("Recognitions length %d", recognitions.size()));
+                //Log.i("[Philos]:", String.format("Recognitions length %d", recognitions.size()));
                 for (Recognition recognition : recognitions) {
-                        opMode.telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                        opMode.telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                                recognition.getLeft(), recognition.getTop());
-                        opMode.telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                            recognition.getRight(), recognition.getBottom());
-                        opMode.telemetry.update();
-                        String objRecognized = recognition.getLabel();
-                        if(objRecognized.equalsIgnoreCase(LABEL_SINGLE_ELEMENT)) {
-                            return 1;
-                        }
-                        else if(objRecognized.equalsIgnoreCase(LABEL_QUAD_ELEMENT)) {
-                            return 4;
-                        }
+                    opMode.telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+//                        //opMode.telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+//                                recognition.getLeft(), recognition.getTop());
+//                        opMode.telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+//                            recognition.getRight(), recognition.getBottom());
+                    String objRecognized = recognition.getLabel();
+                    opMode.telemetry.update();
+
+                    if (objRecognized.equalsIgnoreCase(LABEL_SINGLE_ELEMENT)) {
+                        return 1;
+                    } else if (objRecognized.equalsIgnoreCase(LABEL_QUAD_ELEMENT)) {
+                        return 4;
+                    }
                 }
-                if (recognitions.size() != 0)
-                    opMode.telemetry.addData("[Philos]:","Unrecognized label");
-                else
-                    opMode.telemetry.addData("[Philos]:","no label detected");
+//                if (recognitions.size() != 0)
+//                    opMode.telemetry.addData("[Philos]:","Unrecognized label");
+//                else
+//                    opMode.telemetry.addData("[Philos]:","no label detected");
                 return 0;
             }
 
-            Log.i("[Philos]:", "no recognition");
-            opMode.telemetry.addData("[Philos]:","no recognition object");
+            //Log.i("[Philos]:", "no recognition");
+            opMode.telemetry.addData("[Philos]:", "no recognition object");
+            opMode.telemetry.update();
             return 0;
         }
 
-        Log.i("[Philos]:", "no tfod");
+        //Log.i("[Philos]:", "no tfod");
         opMode.telemetry.addData("[philos]:","no tfod");
         return 0;
     }

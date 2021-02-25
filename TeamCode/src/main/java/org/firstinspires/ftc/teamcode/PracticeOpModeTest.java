@@ -38,15 +38,15 @@ import com.qualcomm.robotcore.util.Range;
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
- *
+ * <p>
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all linear OpModes contain.
- *
+ * <p>
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="PracticeOpMode1", group="Linear Opmode")
+@TeleOp(name = "PracticeOpMode1", group = "Linear Opmode")
 //@Disabled
 public class PracticeOpModeTest extends TeleOp_Methods {
 
@@ -102,7 +102,7 @@ public class PracticeOpModeTest extends TeleOp_Methods {
             rightBackPower = (drive - turn + strafe) * .75;
             leftBackPower = (drive + turn - strafe) * .75;
             intakePower = Range.clip(goIn - goOut, -0.9, 0.9);
-            liftPower = Range.clip(lift, -.5, .5);
+            liftPower = lift * 0.35;
 
 
             if (gamepad2.dpad_right) {
@@ -150,30 +150,29 @@ public class PracticeOpModeTest extends TeleOp_Methods {
                 shoot = 0;
             } else if (gamepad2.y) {
                 shoot = 0.66;
-            }
+            } else if (gamepad2.left_bumper)
+                shoot = 0.55;
 
-            //IMU align to goal/anything
+                //IMU align to goal/anything
             else if (gamepad1.left_bumper)
                 resetAngle();
             else if (gamepad1.right_bumper) {
                 //check(0.4);
                 //sleep(250);
                 //check(0.1);
-                PIDrotate(0,0.8);
+                PIDrotate(0, 0.8);
                 //rotate(0,0.4);
             } else if (gamepad1.dpad_up) {
                 forward(0.8, 24);
                 returnToTeleOp();
             } else if (gamepad1.dpad_right) {
-                diagonals(30,40,0.8);
+                // diagonals(30,40,0.8);
                 returnToTeleOp();
             }
             if (gamepad1.y) {
                 automatedPowerShots();
                 returnToTeleOp();
             }
-            if (gamepad1.b)
-                testArm(1200,0.3);
 /*
             //other random commands
             //
@@ -216,4 +215,3 @@ public class PracticeOpModeTest extends TeleOp_Methods {
         }
     }
 }
-
