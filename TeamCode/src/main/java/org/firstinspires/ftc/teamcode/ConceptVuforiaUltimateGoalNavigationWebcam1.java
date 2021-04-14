@@ -1,3 +1,4 @@
+package org.firstinspires.ftc.teamcode;
 /* Copyright (c) 2019 FIRST. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -27,13 +28,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
-
-import android.hardware.camera2.CameraDevice;
-
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -58,41 +54,42 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * This 2020-2021 OpMode illustrates the basics of using the Vuforia localizer to determine
  * positioning and orientation of robot on the ULTIMATE GOAL FTC field.
  * The code is structured as a LinearOpMode
- * <p>
+ *
  * When images are located, Vuforia is able to determine the position and orientation of the
  * image relative to the camera.  This sample code then combines that information with a
  * knowledge of where the target images are on the field, to determine the location of the camera.
- * <p>
+ *
  * From the Audience perspective, the Red Alliance station is on the right and the
  * Blue Alliance Station is on the left.
- * <p>
+
  * There are a total of five image targets for the ULTIMATE GOAL game.
  * Three of the targets are placed in the center of the Red Alliance, Audience (Front),
  * and Blue Alliance perimeter walls.
  * Two additional targets are placed on the perimeter wall, one in front of each Tower Goal.
  * Refer to the Field Setup manual for more specific location details
- * <p>
+ *
  * A final calculation then uses the location of the camera on the robot to determine the
  * robot's location and orientation on the field.
  *
  * @see VuforiaLocalizer
  * @see VuforiaTrackableDefaultListener
  * see  ultimategoal/doc/tutorial/FTC_FieldCoordinateSystemDefinition.pdf
- * <p>
+ *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
- * <p>
+ *
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
 
 
-@Autonomous(name = "vuforiaweb", group = "Philos")
+@TeleOp(name = "ULTIMATEGOAL Vuforia ", group = "Concept")
+public class ConceptVuforiaUltimateGoalNavigationWebcam1 extends LinearOpMode {
 
-public class vuforiaWebcamone extends Autonomous_Methods {
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     private static final boolean PHONE_IS_PORTRAIT = false;
+
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
      * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
@@ -105,50 +102,33 @@ public class vuforiaWebcamone extends Autonomous_Methods {
      * Once you've obtained a license key, copy the string from the Vuforia web site
      * and paste it in to your code on the next line, between the double quotes.
      */
-    private static final String VUFORIA_KEY =
-            "AcN0y4L/////AAABmba4lPITIkWRn2q+9ILQz0OFL4Rfys1zaB87XhQSxQkWfJhxUt0NXILkrHdhvNyLxmrWFLqDBH7xwnz8gWxF0S+zuVfiDDef4dpTe0SikRWBi1dFZ/vWyigJOQyWXHB90u7bO7M0KMrvge+nhZSyS01Uhi11WQGfrxEpCzt8jvalA1yGkQln2XBwyHYtCrfaKDtm/CxPf6oOEEMQEB0aa1WsPTmmix5Hn51m1nUfiyMEmPaqvIzEWgzoFWun7kDhrm/1hrFnOZxiJytaKllvlpjw+UA9Hu9/+wNfD9lvbwZfrRYd70DJYZIYCw2iHtwoYTBk44Z6ZDw7E9Wl9lnnRerwgEKxWZBt/ScfbWUgP4+T";
+    private static final String VUFORIA_KEY = "AeA0/Gv/////AAABmTbgn67KbUjyiURMJ9kjKQqMrU0DOUtGplD8c3d6jHRHE/z1RKFrsBCdxk43yeJRSfi0HykDf+hQlKP+oLHJszg5f+0y07pylSt7QDzchxfv25Wrs7lNBnNZa9eHoihYLa+LDKVDfogyMloCpnUcC7hpZ+rSWHEWHsrL+IUpHTlr37CZNqrknOMHXp9QFhuBT60qi5I4i7XM4JsqBfgldhJ8GDPNdnOfFrsICxC+tj2lVRmfCJf/3y3+D+lFX4KTu8M3ojG51HDuSklTWAH7bN35iM+t+7KFSFgERPpyTAbQnRMhJPhtzXy7wPI3ULJd/mt5XPIiU9EIvMK1W6c3o99voem7ykXpw6iyddfMFRHv";
+
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here
-    private static final float mmPerInch = 25.4f;
-    private static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    private static final float mmPerInch        = 25.4f;
+    private static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
+
     // Constants for perimeter targets
     private static final float halfField = 72 * mmPerInch;
-    private static final float quadField = 36 * mmPerInch;
+    private static final float quadField  = 36 * mmPerInch;
+
+    // Class Members
+    private OpenGLMatrix lastLocation = null;
+    private VuforiaLocalizer vuforia = null;
+
     /**
      * This is the webcam we are to use. As with other hardware devices such as motors and
      * servos, this device is identified using the robot configuration tool in the FTC application.
      */
     WebcamName webcamName = null;
-    private String pic;
-    private boolean lol;
-    private float LoopTimeLimit = 0;
-    private float robotX = 0;
-    private float robotY = 0;
-    private float robotZ = 0;
-    private float rotX = 0;
-    private float rotY = 0;
-    private float rotZ = 0;
 
-    private String direction = "";
-    private float angle = 0;
-    // Class Members
-    private OpenGLMatrix lastLocation = null;
-    private VuforiaLocalizer vuforia = null;
     private boolean targetVisible = false;
-    private float phoneXRotate = 0;
-    private float phoneYRotate = 0;
-    private float phoneZRotate = 0;
-    private double targetRange;
-    private double targetBearing;
-    private double relativeBearing;
+    private float phoneXRotate    = 0;
+    private float phoneYRotate    = 0;
+    private float phoneZRotate    = 0;
 
-    @Override
-    public void runOpMode() {
-
-//        leftFront  = hardwareMap.get(DcMotor.class, "leftFront");
-//        leftRear = hardwareMap.get(DcMotor.class, "leftRear");
-//        rightFront  = hardwareMap.get(DcMotor.class, "rightFront");
-//        rightRear = hardwareMap.get(DcMotor.class, "rightRear");
+    @Override public void runOpMode() {
         /*
          * Retrieve the camera we are to use.
          */
@@ -223,12 +203,12 @@ public class vuforiaWebcamone extends Autonomous_Methods {
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0)));
         frontWallTarget.setLocation(OpenGLMatrix
                 .translation(-halfField, 0, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90)));
 
         // The tower goal targets are located a quarter field length from the ends of the back perimeter wall.
         blueTowerGoalTarget.setLocation(OpenGLMatrix
                 .translation(halfField, quadField, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , -90)));
         redTowerGoalTarget.setLocation(OpenGLMatrix
                 .translation(halfField, -quadField, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
@@ -261,9 +241,9 @@ public class vuforiaWebcamone extends Autonomous_Methods {
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
-        final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
+        final float CAMERA_FORWARD_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+        final float CAMERA_VERTICAL_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
+        final float CAMERA_LEFT_DISPLACEMENT = 4;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
@@ -274,42 +254,31 @@ public class vuforiaWebcamone extends Autonomous_Methods {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
 
-
         // WARNING:
         // In this sample, we do not wait for PLAY to be pressed.  Target Tracking is started immediately when INIT is pressed.
         // This sequence is used to enable the new remote DS Camera Preview feature to be used with this sample.
         // CONSEQUENTLY do not put any driving commands in this loop.
         // To restore the normal opmode structure, just un-comment the following line:
-        initRobot();
-        waitForStart();
 
+        // waitForStart();
 
         // Note: To use the remote camera preview:
         // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
         // Tap the preview window to receive a fresh image.
 
         targetsUltimateGoal.activate();
-        while (opModeIsActive()) {
-
+        while (!isStopRequested()) {
 
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
-            //lol = false;
-            sleep(1000);
-
-
             for (VuforiaTrackable trackable : allTrackables) {
-                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
-                    pic = trackable.getName();
-
-                    telemetry.update();
-
                     targetVisible = true;
 
                     // getUpdatedRobotLocation() will return null if no new information is available since
                     // the last time that call was made, or if the trackable is not currently visible.
-                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
                     if (robotLocationTransform != null) {
                         lastLocation = robotLocationTransform;
                     }
@@ -317,116 +286,24 @@ public class vuforiaWebcamone extends Autonomous_Methods {
                 }
             }
 
-            VectorF translation = lastLocation.getTranslation();
-            robotX = translation.get(0) / mmPerInch;
-            robotY = translation.get(1) / mmPerInch;
-            robotZ = translation.get(2) / mmPerInch;
-            Orientation robotAngle = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-            rotX = robotAngle.firstAngle;
-            rotY = robotAngle.secondAngle;
-            rotZ = robotAngle.thirdAngle;
-
-
-
             // Provide feedback as to where the robot is located (if we know).
             if (targetVisible) {
-
-                targetRange = Math.hypot(robotX, robotY);
-                targetBearing = Math.toDegrees(Math.asin(robotY / targetRange));
-
-                telemetry.addData("Visible Target", "yes");
-                telemetry.addData("Hi Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                        translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-                telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotX, rotY, rotZ);
-                telemetry.addData("Sin: ", targetBearing);
-
-
                 // express position (translation) of robot in inches.
+                VectorF translation = lastLocation.getTranslation();
+                telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                        translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
                 // express the rotation of the robot in degrees.
-                telemetry.update();
-                //sleep(2000);
-
-
+                Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+                telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
             }
-            break;
-
-        }
-
-        telemetry.addData(": ", rotZ);
-        telemetry.update();
-        //sleep(5000);
-
-        initRobot();
-        /*
-
-        if(pic.equals("Blue Tower Goal Target")){
-            rotZ = rotZ-90;
-            PIDrotate(-rotZ, .2);
-
-        }
-        sleep(3000);
-
-         */
-        if (robotX > 0.0) {
-            double dist = robotX;
-            telemetry.addData("dist: ", dist);
+            else {
+                telemetry.addData("Visible Target", "none");
+            }
             telemetry.update();
-            //sleep(4000);
-
-            backward(.6, dist, true);
-        }
-        sleep(2000);
-
-
-        if (robotY > 37.0) {
-            double dist = robotY - 37.0;
-            telemetry.addData("dist: ", dist);
-            telemetry.update();
-            //sleep(4000);
-
-            strafeRight(.6, dist, true);
         }
 
-
-
-
-
-
-
-
-        //PIDrotate(-rotZ, .2);
-        /*
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /*
-        if(robotY > 35.0){
-            while(robotY >35.0){
-                strafeLeft(.4);
-            }
-        }
-        if(robotY < 35.0){
-            while(robotY >35.0){
-                strafeRight(.4);
-            }
-        }
-        */
-
-
+        // Disable Tracking when we are done;
+        targetsUltimateGoal.deactivate();
     }
-
-
 }

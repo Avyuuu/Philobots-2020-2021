@@ -38,15 +38,15 @@ import com.qualcomm.robotcore.util.Range;
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
- * <p>
+ *
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all linear OpModes contain.
- * <p>
+ *
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name = "PracticeOpMode1", group = "Linear Opmode")
+@TeleOp(name = "PracticeOpMode", group = "Linear Opmode")
 //@Disabled
 public class PracticeOpModeTest extends TeleOp_Methods {
 
@@ -102,14 +102,14 @@ public class PracticeOpModeTest extends TeleOp_Methods {
             rightBackPower = (drive - turn + strafe) * .75;
             leftBackPower = (drive + turn - strafe) * .75;
             intakePower = Range.clip(goIn - goOut, -0.9, 0.9);
-            liftPower = lift * 0.35;
+            liftPower = Range.clip(lift, -.5, .5);
 
 
             if (gamepad2.dpad_right) {
-                trigger.setPosition(shootPosition);
-                sleep(100);
-                trigger.setPosition(readyPosition);
+                shoot();
             }
+            if (gamepad2.dpad_left)
+                shootThree();
 
             //shooterPower.setPower(shoot);
 
@@ -124,49 +124,44 @@ public class PracticeOpModeTest extends TeleOp_Methods {
             back_right.setPower(rightBackPower);
             front_left.setPower(leftFrontPower);
             front_right.setPower(rightFrontPower);
-            intake.setPower(intakePower);
+            //intake.setPower(intakePower);
             frontShooter.setPower(shoot);
             wobblegoal.setPower(liftPower);
 
+            if (gamepad2.a)
+                intake.setPower(0.55);
+            if (gamepad2.b)
+                intake.setPower(0);
+
             //for shooter function and callibration
             //
-            if (gamepad2.b) {
-                button_b = true;
-            } else if (gamepad2.a) {
-                button_a = true;
-            }
-            if (button_b == true) {
-                frontShooter.setPower(shoot += 0.025);
-                button_b = false;
-                sleep(200);
-            } else if (button_a == true) {
-                frontShooter.setPower(shoot -= 0.025);
-                button_a = false;
-                sleep(200);
-            }
+
             if (shoot < 0) {
                 shoot = 0;
             } else if (gamepad2.x) {
                 shoot = 0;
             } else if (gamepad2.y) {
-                shoot = 0.66;
-            } else if (gamepad2.left_bumper)
-                shoot = 0.55;
+                shoot = 0.6;
+            }
 
+            if (gamepad2.left_bumper)
+                grabClose();
+            if (gamepad2.right_bumper)
+                grabOpen();
                 //IMU align to goal/anything
-            else if (gamepad1.left_bumper)
-                resetAngle();
-            else if (gamepad1.right_bumper) {
+                //else if (gamepad1.left_bumper)
+                //    resetAngle();
+                //else if (gamepad1.right_bumper) {
                 //check(0.4);
                 //sleep(250);
                 //check(0.1);
-                PIDrotate(0, 0.8);
-                //rotate(0,0.4);
-            } else if (gamepad1.dpad_up) {
+                //PIDrotate(0,0.8);
+                //rotate(0,0.4); }
+            else if (gamepad1.dpad_up) {
                 forward(0.8, 24);
                 returnToTeleOp();
             } else if (gamepad1.dpad_right) {
-                // diagonals(30,40,0.8);
+                diagonals(30, 40, 0.8);
                 returnToTeleOp();
             }
             if (gamepad1.y) {
@@ -215,3 +210,4 @@ public class PracticeOpModeTest extends TeleOp_Methods {
         }
     }
 }
+

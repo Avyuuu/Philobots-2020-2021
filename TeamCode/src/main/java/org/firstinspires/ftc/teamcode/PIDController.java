@@ -246,7 +246,7 @@ public class PIDController {
      * @return true if the error is less than the tolerance
      */
     public boolean onTarget() {
-        return (Math.abs(m_error) < 0.75);//Math.abs(m_tolerance / 100.0 * (m_maximumInput - m_minimumInput)));
+        return (Math.abs(m_error) < 0.5);//Math.abs(m_tolerance / 100.0 * (m_maximumInput - m_minimumInput)));
     }
 
     /**

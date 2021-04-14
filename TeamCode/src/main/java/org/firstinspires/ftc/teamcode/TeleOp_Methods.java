@@ -72,7 +72,6 @@ public class TeleOp_Methods extends TeleOp_Members {
      *
      * @param degrees Degrees to turn, + is left - is right
      */
-
     public void rotate(double degrees, double power) {
         double leftPower, rightPower;
 
@@ -135,10 +134,10 @@ public class TeleOp_Methods extends TeleOp_Members {
      *
      * @param degrees Degrees to turn, + is left - is right
      */
-    protected void PIDrotate(double degrees, double power) {
+    public void PIDrotate(double degrees, double power) {
         // restart imu angle tracking.
         //resetAngle();
-
+        //degrees /= 2;
         back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -155,12 +154,15 @@ public class TeleOp_Methods extends TeleOp_Members {
         // dependant on the motor and gearing configuration, starting power, weight of the robot and the
         // on target tolerance. If the controller overshoots, it will reverse the sign of the output
         // turning the robot back toward the setpoint value.
+        //double p = Math.abs(power/degrees);
+        //double i = p / 200.0;
+        //pidRotate.setPID(p, i, 0);
 
         pidRotate.reset();
         pidRotate.setSetpoint(degrees); //all it does it put degrees into m_setPoint so that it can be used in next method
         pidRotate.setInputRange(0, degrees);
         pidRotate.setOutputRange(0, power);
-        pidRotate.setTolerance(1);
+        pidRotate.setTolerance(15);
         pidRotate.enable();
 
         // getAngle() returns + when rotating counter clockwise (left) and - when rotating
@@ -195,10 +197,7 @@ public class TeleOp_Methods extends TeleOp_Members {
             } while (opModeIsActive() && !pidRotate.onTarget());
 
         // turn the motors off.
-        back_left.setPower(0);
-        back_right.setPower(0);
-        front_left.setPower(0);
-        front_right.setPower(0);
+        turnOnZeroBehavior();
 
         //rotation = getAngle();
 
@@ -216,15 +215,15 @@ public class TeleOp_Methods extends TeleOp_Members {
      *              add sleep of 50 in between
      */
     public void check(double power) {
-        sleep(50);
+        //sleep(50);
         if (getAngle() == 0) {
-            PIDrotate(0, power);
+            rotate(0, power);
         } else if (getAngle() > 0) {
-            PIDrotate(-getAngle(), power);
+            rotate(-getAngle(), power);
         } else if (getAngle() < 0) {
-            PIDrotate(-getAngle(), power);
+            rotate(-getAngle(), power);
         }
-        sleep(250);
+        //sleep(250);
     }
     //
     //
@@ -235,18 +234,13 @@ public class TeleOp_Methods extends TeleOp_Members {
     /**
      * Forward is never used but is here to test for correction
      *
-     * @param speed
+     * @param power
      * @param distance
      */
-    public void forward(double speed, double distance) {
-        //resetAngle();
-
-        back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+    public void forward(double power, double distance) {
         int counts = (int) ((distance / (4 * Math.PI)) * 1075);
+
+
         back_left.setTargetPosition(counts);
         front_left.setTargetPosition(counts);
         back_right.setTargetPosition(counts);
@@ -258,42 +252,42 @@ public class TeleOp_Methods extends TeleOp_Members {
         front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        back_left.setPower(speed);
-        front_left.setPower(speed);
-        back_right.setPower(speed);
-        front_right.setPower(speed);
+        back_left.setPower(power);
+        front_left.setPower(power);
+        back_right.setPower(power);
+        front_right.setPower(power);
+
+
+        //returnToTeleOp();
+        //PIDMovement(speed, counts);
 
         while (opModeIsActive() && back_left.isBusy() && front_left.isBusy() && back_right.isBusy() && front_right.isBusy()) {
             double correction = pidDrive.performPID(getAngle());
-            back_left.setPower(speed - correction);
-            front_left.setPower(speed - correction);
-            back_right.setPower(speed + correction);
-            front_right.setPower(speed + correction);
+            back_left.setPower(power - correction);
+            front_left.setPower(power - correction);
+            back_right.setPower(power + correction);
+            front_right.setPower(power + correction);
 
             telemetry.addData("Angle: ", "%.2f", getAngle());
             telemetry.addData("correction: ", "%.2f", checkDirection());
+            telemetry.addData("movement power: ", power);
+            telemetry.addData("minimum and maximum values: ", "%.2f", back_left.getCurrentPosition());
+            telemetry.addData("minimum and maximum values: ", "%.2f", counts);
+            telemetry.update();
         }
 
-        back_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        back_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        front_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        back_left.setPower(0);
-        front_left.setPower(0);
-        back_right.setPower(0);
-        front_right.setPower(0);
+        // turn the motors off.
+        turnOnZeroBehavior();
 
-        //setting all motor powers to 0 (stopping)
-        back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //rotation = getAngle();
 
-        //check(0.3);
+        // wait for rotation to stop.
+        sleep(250);
+
     }
 
     /**
-     * Need this method for Power Shot Automation
+     * Need this method for Power Shot Autoation
      *
      * @param speed
      * @param distance
@@ -332,10 +326,9 @@ public class TeleOp_Methods extends TeleOp_Members {
             front_right.setPower(speed - correction);
 
             telemetry.addData("Angle: ", "%.2f", getAngle());
-            telemetry.addData("correction: ", "%.2f", checkDirection());
+            telemetry.addData("correction: ", "%.2f", correction);
         }
         turnOnZeroBehavior();
-
         //setting all motor powers to 0 (stopping)
         back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -345,8 +338,8 @@ public class TeleOp_Methods extends TeleOp_Members {
 
     public void strafeLeft(double speed, double distance) {
         back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         int counts = (int) ((distance / (4 * Math.PI)) * 1075);
@@ -368,6 +361,7 @@ public class TeleOp_Methods extends TeleOp_Members {
 
         while (opModeIsActive() && back_left.isBusy() && back_right.isBusy() && front_right.isBusy() && front_left.isBusy()) {
             double correction = pidDrive.performPID(getAngle());
+            //double movement = pidMovement.performPID((back_left.getCurrentPosition() + back_right.getCurrentPosition() + front_left.getCurrentPosition() + front_right.getCurrentPosition()) / 4);
             back_left.setPower(speed - correction);
             front_left.setPower(speed + correction);
             back_right.setPower(speed - correction);
@@ -378,45 +372,116 @@ public class TeleOp_Methods extends TeleOp_Members {
         }
 
         turnOnZeroBehavior();
-
         //setting all motor powers to 0 (stopping)
         back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //check(0.4);
+        //check(0.8);
     }
+
+    public void diagonals(double x, double y, double speed) {
+        int counts_x = (int) ((x / (4 * Math.PI)) * 1075);
+        int counts_y = (int) ((y / (4 * Math.PI)) * 1075);
+        int counts = (int) Math.sqrt(counts_x * counts_x + counts_y * counts_y);
+
+        double theta = Math.atan(x / y);
+        int counts_a = (int) ((counts_x + counts_y) / Math.sqrt(2));
+        int counts_b = (int) ((counts_y - counts_x) / Math.sqrt(2));
+        double speed_b = speed * Math.sin(45 - theta);
+        double speed_a = speed * Math.cos(45 - theta);
+        double coefficient = 1.0; // this number can be adjusted to any number
+        //int counts_a = (int) (coefficient * speed_a * counts);
+        //int counts_b = (int) (coefficient * speed_b * counts);
+        // option 2
+        //if above does not work, configure counts_a = count_b = counts
+
+        resetEncoders();
+        back_left.setTargetPosition(counts_b);
+        front_left.setTargetPosition(counts_a);
+        back_right.setTargetPosition(counts_a);
+        front_right.setTargetPosition(counts_b);
+        runToPosition();
+        back_left.setPower(speed_b);
+        front_left.setPower(speed_a);
+        back_right.setPower(speed_a);
+        front_right.setPower(speed_b);
+
+        while (opModeIsActive() && back_left.isBusy() && front_left.isBusy() && back_right.isBusy() && front_right.isBusy()) {
+        }
+        turnOnZeroBehavior();
+    }
+
     /**
      * Automated movement of arm to designated parallel position
+     *
      * @param counts
      * @param power
      */
-    /*
-    public void testArm(int counts, double power)
-    {
+    public void testArm(int counts, double power) {
         wobblegoal.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         wobblegoal.setTargetPosition(counts);
         wobblegoal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         wobblegoal.setPower(power);
-        while (opModeIsActive() && wobblegoal.isBusy()) { }
+        while (opModeIsActive() && wobblegoal.isBusy()) {
+        }
         turnOnZeroBehavior();
         wobblegoal.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
-     */
+
+    public void shoot() {
+        trigger.setPosition(shootPosition);
+        sleep(200);
+        trigger.setPosition(readyPosition);
+    }
+
+    public void shootThree() {
+        trigger.setPosition(shootPosition);
+        sleep(200);
+        trigger.setPosition(readyPosition);
+        sleep(200);
+        trigger.setPosition(shootPosition);
+        sleep(200);
+        trigger.setPosition(readyPosition);
+        sleep(200);
+        trigger.setPosition(shootPosition);
+        sleep(200);
+        trigger.setPosition(readyPosition);
+    }
 
     /**
      * Automated 3 power shots from Wall
      */
     public void automatedPowerShots() {
+        /*
         //resetAngle();
+        frontShooter.setPower(0.575);
+        //sleep(2000);
+        strafeLeft(0.4, 20.5);
+        //check(0.5);
+        trigger.setPosition(shootPosition);
+        sleep(100);
+        trigger.setPosition(readyPosition);
+        strafeLeft(0.4, 4.2);
+        //check(0.5);
+        trigger.setPosition(shootPosition);
+        sleep(100);
+        trigger.setPosition(readyPosition);
+        strafeLeft(0.4, 4.2);
+        //check(0.6);
+        trigger.setPosition(shootPosition);
+        sleep(100);
+        trigger.setPosition(readyPosition);
+        sleep(500);
+         */
         frontShooter.setPower(0.55);
-        strafeLeft(0.4, 16.25);
+        strafeLeft(0.4, 22.25);
         PIDrotate(0, 0.8);
-        trigger();
+        shoot();
         PIDrotate(6.5, 0.8);
-        trigger();
+        shoot();
         PIDrotate(-6.5, 0.8);
-        trigger();
+        shoot();
         frontShooter.setPower(0);
     }
 
@@ -429,6 +494,26 @@ public class TeleOp_Methods extends TeleOp_Members {
         front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         wobblegoal.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    /**
+     * reset the darn encoders
+     */
+    public void resetEncoders() {
+        back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    /**
+     * turn on run to position on darn encoders
+     */
+    public void runToPosition() {
+        back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     /**
@@ -447,12 +532,12 @@ public class TeleOp_Methods extends TeleOp_Members {
         wobblegoal.setPower(0);
     }
 
-    public void trigger() {
+    public void grabOpen() {
+        grab.setPosition(0.7);
+    }
 
-        trigger.setPosition(0.5);
-        sleep(200);
-        trigger.setPosition(0.7);
-        sleep(400);
+    public void grabClose() {
+        grab.setPosition(1);
     }
 
     /**

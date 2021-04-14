@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -17,14 +17,15 @@ public class TeleOp_Members extends LinearOpMode {
             (WHEEL_DIAMETER_INCHES * 3.1415);
     //Declare OpMode Members
     public ElapsedTime runtime = new ElapsedTime();
-    public DcMotor back_left = null;
-    public DcMotor back_right = null;
-    public DcMotor front_left = null;
-    public DcMotor front_right = null;
-    public DcMotor frontShooter = null;
+    public DcMotorEx back_left = null;
+    public DcMotorEx back_right = null;
+    public DcMotorEx front_left = null;
+    public DcMotorEx front_right = null;
+    public DcMotorEx frontShooter = null;
     public DcMotor wobblegoal = null;
-    public DcMotor intake = null;
+    public DcMotorEx intake = null;
     public Servo trigger = null;
+    public Servo grab = null;
     //static final double     DRIVE_SPEED             = 0.6;
     //static final double     TURN_SPEED              = 0.5;
     BNO055IMU imu;
@@ -33,7 +34,7 @@ public class TeleOp_Members extends LinearOpMode {
     double readyPosition = 0.7, shootPosition = 0.475;
     double shoot = 0;
     boolean button_b = false, button_a = false;
-    PIDController pidRotate, pidDrive;
+    PIDController pidRotate, pidDrive, pidMovement;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -49,14 +50,15 @@ public class TeleOp_Members extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        back_left = hardwareMap.get(DcMotor.class, "leftRear");
-        back_right = hardwareMap.get(DcMotor.class, "rightRear");
-        front_left = hardwareMap.get(DcMotor.class, "leftFront");
-        front_right = hardwareMap.get(DcMotor.class, "rightFront");
-        frontShooter = hardwareMap.get(DcMotor.class, "frontShooter");
-        intake = hardwareMap.get(DcMotor.class, "intake");
+        back_left = hardwareMap.get(DcMotorEx.class, "leftRear");
+        back_right = hardwareMap.get(DcMotorEx.class, "rightRear");
+        front_left = hardwareMap.get(DcMotorEx.class, "leftFront");
+        front_right = hardwareMap.get(DcMotorEx.class, "rightFront");
+        frontShooter = hardwareMap.get(DcMotorEx.class, "frontShooter");
+        intake = hardwareMap.get(DcMotorEx.class, "intake");
         wobblegoal = hardwareMap.get(DcMotor.class, "wobbleArm");
         trigger = hardwareMap.servo.get("trigger");
+        grab = hardwareMap.servo.get("grab");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -68,13 +70,21 @@ public class TeleOp_Members extends LinearOpMode {
         intake.setDirection(DcMotor.Direction.FORWARD);
         wobblegoal.setDirection(DcMotorSimple.Direction.FORWARD);
 
+
         back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //frontShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //wobblegoal.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        wobblegoal.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        frontShooter.setVelocityPIDFCoefficients(10, .5, 0, 11);
+        intake.setVelocityPIDFCoefficients(10, .5, 01, 11);
+        back_left.setPositionPIDFCoefficients(5.0);
+        back_right.setPositionPIDFCoefficients(5.0);
+        front_left.setPositionPIDFCoefficients(5.0);
+        front_right.setPositionPIDFCoefficients(5.0);
 
         //int originalPosition = wobbleArm.getCurrentPosition();
 
@@ -88,17 +98,24 @@ public class TeleOp_Members extends LinearOpMode {
         // Set PID proportional value to start reducing power at about 50 degrees of rotation.
         // P by itself may stall before turn completed so we add a bit of I (integral) which
         // causes the PID controller to gently increase power if the turn is not completed.
-        pidRotate = new PIDController(.013, .00003, 0);
+        pidRotate = new PIDController(.013, 0.0000, .00);
 
         // Set PID proportional value to produce non-zero correction value when robot veers off
         // straight line. P value controls how sensitive the correction is.
-        pidDrive = new PIDController(.01, 0, 0.005);
+        pidDrive = new PIDController(.05, 0.0005, 0.1);
 
+        pidMovement = new PIDController(.012, 0.000, .0002);
         // Set up parameters for driving in a straight line.
         pidDrive.setSetpoint(0);
         pidDrive.setOutputRange(0, power);
         pidDrive.setInputRange(-90, 90);
         pidDrive.enable();
+
+        //initialize pidMovement
+        pidMovement.setSetpoint(0);
+        pidMovement.setOutputRange(0, power);
+        pidMovement.setInputRange(0, 90);
+        pidMovement.enable();
 
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",

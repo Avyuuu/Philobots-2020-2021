@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.Library.VisionUtility;
 
 public class Autonomous_Methods extends LinearOpMode {
 
-    private Hardware robot = new Hardware();
+    public Hardware robot = new Hardware();
     public VisionUtility visionUtility;
     private IMUUtility imu;
     PIDController pidRotate, pidDrive;
@@ -186,7 +186,7 @@ public class Autonomous_Methods extends LinearOpMode {
     }
 
 
-    public void forward(double speed, double distance, boolean usePidRotate) {
+    public void forward(double speed, double distance, boolean usePidRotate, boolean useIntake) {
 
         int counts = (int) ((distance / (4 * Math.PI)) * 1200);
         robot.back_left.setTargetPosition(counts);
@@ -212,6 +212,9 @@ public class Autonomous_Methods extends LinearOpMode {
             robot.back_right.setPower(speed + correction);
             robot.front_right.setPower(speed + correction);
 
+            if (useIntake)
+                intake(0.8);
+
         }
 
 
@@ -225,7 +228,7 @@ public class Autonomous_Methods extends LinearOpMode {
             PIDrotate(0,0.8);
     }
 
-    public void backward(double speed, double distance, boolean usePidRotate) {
+    public void backward(double speed, double distance, boolean usePidRotate, boolean useIntake) {
 
 
         //RPM for GoBuilda YEllow Jacket planetary gear motors
@@ -253,6 +256,8 @@ public class Autonomous_Methods extends LinearOpMode {
             robot.front_left.setPower(speed + correction);
             robot.back_right.setPower(speed - correction);
             robot.front_right.setPower(speed - correction);
+            if (useIntake)
+                intake(0.8);
         }
 
 
@@ -267,7 +272,7 @@ public class Autonomous_Methods extends LinearOpMode {
 
     }
 
-    public void strafeLeft(double speed, double distance, boolean usePidRotate) {
+    public void strafeLeft(double speed, double distance, boolean usePidRotate, boolean useIntake) {
 
         int counts = (int) ((distance / (4 * Math.PI)) * 1200);
         robot.back_left.setTargetPosition(counts);
@@ -290,6 +295,8 @@ public class Autonomous_Methods extends LinearOpMode {
             robot.front_left.setPower(speed + correction);
             robot.back_right.setPower(speed - correction);
             robot.front_right.setPower(speed + correction);
+            if (useIntake)
+                intake(0.8);
         }
 
 
@@ -304,7 +311,7 @@ public class Autonomous_Methods extends LinearOpMode {
 
     }
 
-    public void strafeRight(double speed, double distance, boolean usePidRotate) {
+    public void strafeRight(double speed, double distance, boolean usePidRotate, boolean useIntake) {
 
 
         int counts = (int) ((distance / (4 * Math.PI)) * 1200);
@@ -331,6 +338,8 @@ public class Autonomous_Methods extends LinearOpMode {
             robot.front_left.setPower(speed - correction);
             robot.back_right.setPower(speed + correction);
             robot.front_right.setPower(speed - correction);
+            if (useIntake)
+                intake(0.8);
         }
 
         //setting all motor powers to 0 (stopping)
@@ -431,7 +440,7 @@ public class Autonomous_Methods extends LinearOpMode {
         robot.trigger.setPosition(0.475);
         sleep(200);
         robot.trigger.setPosition(0.71);
-        sleep(200);
+        sleep(600);
     }
 
     public void intake (double power) {
@@ -440,56 +449,56 @@ public class Autonomous_Methods extends LinearOpMode {
 
     }
 
-    public void arm (double power) {
+    public void arm(double power, int counts) {
         robot.wobblegoal.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.wobblegoal.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        int counts = (1325);
         robot.wobblegoal.setTargetPosition(counts);
         robot.wobblegoal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.wobblegoal.setPower(power);
-        sleep(3500);
-    }
-
-    public void testEncoders(double distance, double speed){
-
-
-
-        robot.back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        telemetry.addData("start Encoder Value", robot.back_right.getCurrentPosition());
-        telemetry.update();
-
-        int counts = (int) ((distance / (4 * Math.PI)) * 1200);
-        robot.back_left.setTargetPosition(counts);
-        robot.back_right.setTargetPosition(counts);
-        robot.front_right.setTargetPosition(counts);
-        robot.front_left.setTargetPosition(counts);
-
-        //setting all motors to go forward (positive)
-
-        robot.back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.back_left.setPower(speed);
-        robot.back_right.setPower(speed);
-        robot.front_right.setPower(speed);
-        robot.front_left.setPower(speed);
-
-        while (opModeIsActive() && robot.back_left.isBusy() && robot.back_right.isBusy() && robot.front_right.isBusy() && robot.front_left.isBusy()) {
+        while (opModeIsActive() && robot.wobblegoal.isBusy()) {
+            robot.wobblegoal.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
-
-        int start = robot.back_right.getCurrentPosition();
-
-
-
-        telemetry.addData("end Encoder Value", (robot.back_right.getCurrentPosition() - start));
-        telemetry.update();
-        sleep(2000);
+        robot.wobblegoal.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
+
+    public void testEncoders() {
+
+        robot.back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        int start_back_right = robot.back_right.getCurrentPosition();
+        int start_back_left = robot.back_left.getCurrentPosition();
+        int start_front_right = robot.front_right.getCurrentPosition();
+        int start_front_left = robot.back_left.getCurrentPosition();
+
+        sleep(10000);
+        int end_back_right = robot.back_right.getCurrentPosition();
+        int end_back_left = robot.back_left.getCurrentPosition();
+        int end_front_right = robot.front_right.getCurrentPosition();
+        int end_front_left = robot.back_left.getCurrentPosition();
+
+
+        telemetry.addData("back_right Encoder Value", (start_back_right - end_back_right));
+        telemetry.addData("back_left Encoder Value", (start_back_left - end_back_left));
+        telemetry.addData("front_left Encoder Value", (start_front_left - end_front_left));
+        telemetry.addData("front_right Encoder Value", (start_front_right - end_front_right));
+        telemetry.update();
+
+    }
+
+    public void grabOpen() {
+
+        robot.grab.setPosition(0.7);
+    }
+
+    public void grabClose() {
+
+        robot.grab.setPosition(1);
+    }
+
 
     @Override
     public void runOpMode() throws InterruptedException {

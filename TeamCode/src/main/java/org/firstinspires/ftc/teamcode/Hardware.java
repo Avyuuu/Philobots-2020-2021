@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -15,10 +16,11 @@ public class Hardware {
     public DcMotor front_right = null;
     public DcMotor back_left= null;
     public DcMotor back_right = null;
-    public DcMotor shooter = null;
+    public DcMotorEx shooter = null;
     public DcMotor intake = null;
     public Servo trigger = null;
     public DcMotor wobblegoal = null;
+    public Servo grab = null;
 
 
     // Other variable names
@@ -42,7 +44,7 @@ public class Hardware {
         front_right= hwMap.dcMotor.get("rightFront");
         back_left = hwMap.dcMotor.get("leftRear");
         back_right = hwMap.dcMotor.get("rightRear");
-        shooter = hwMap.dcMotor.get("frontShooter");
+        shooter = (DcMotorEx) hwMap.dcMotor.get("frontShooter");
         wobblegoal = hwMap.dcMotor.get("wobbleArm");
         intake = hwMap.dcMotor.get("intake");
 
@@ -72,6 +74,7 @@ public class Hardware {
         wobblegoal.setPower(0);
         intake.setPower(0);
 
+        shooter.setVelocityPIDFCoefficients(10, 5, 0, 11);
 
     }
 
@@ -88,7 +91,7 @@ public class Hardware {
         front_right= hwMap.dcMotor.get("rightFront");
         back_left = hwMap.dcMotor.get("leftRear");
         back_right = hwMap.dcMotor.get("rightRear");
-        shooter = hwMap.dcMotor.get("frontShooter");
+        shooter = (DcMotorEx) hwMap.dcMotor.get("frontShooter");
         wobblegoal = hwMap.dcMotor.get("wobbleArm");
         intake = hwMap.dcMotor.get("intake");
 
@@ -139,10 +142,11 @@ public class Hardware {
         front_right= hwMap.dcMotor.get("rightFront");
         back_left = hwMap.dcMotor.get("leftRear");
         back_right = hwMap.dcMotor.get("rightRear");
-        shooter = hwMap.dcMotor.get("frontShooter");
+        shooter = (DcMotorEx) hwMap.dcMotor.get("frontShooter");
         wobblegoal = hwMap.dcMotor.get("wobbleArm");
         trigger = hwMap.servo.get("trigger");
         intake = hwMap.dcMotor.get("intake");
+        grab = hwMap.servo.get("grab");
 
         // Initialize Motors
         front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -169,11 +173,15 @@ public class Hardware {
         wobblegoal.setPower(0);
         intake.setPower(0);
         trigger.setPosition(0.71);
+        grab.setPosition(1);
 
         front_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         front_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         back_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        wobblegoal.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
