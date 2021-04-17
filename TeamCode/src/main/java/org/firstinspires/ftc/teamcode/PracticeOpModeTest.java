@@ -68,7 +68,13 @@ public class PracticeOpModeTest extends TeleOp_Methods {
             double rightFrontPower, rightBackPower;
             double intakePower, liftPower;
             //boolean button_b, button_a;
-
+            if (gamepad1.right_bumper && baseSpeed == 1) {
+                baseSpeed = 0.3;
+                sleep(200);
+            } else if (gamepad1.right_bumper && baseSpeed == 0.3) {
+                baseSpeed = 1;
+                sleep(200);
+            }
 
             // Choose to drive using either Tank Mode, or POV Mode
             // Comment out the method that's not used.  The default below is POV.
@@ -97,10 +103,10 @@ public class PracticeOpModeTest extends TeleOp_Methods {
             double lift = gamepad2.left_stick_x;
             //double shoot = gamepad1.right_trigger;
 
-            leftFrontPower = (drive + turn + strafe) * .75;
-            rightFrontPower = (drive - turn - strafe) * .75;
-            rightBackPower = (drive - turn + strafe) * .75;
-            leftBackPower = (drive + turn - strafe) * .75;
+            leftFrontPower = (drive + turn + strafe) * baseSpeed;
+            rightFrontPower = (drive - turn - strafe) * baseSpeed;
+            rightBackPower = (drive - turn + strafe) * baseSpeed;
+            leftBackPower = (drive + turn - strafe) * baseSpeed;
             intakePower = Range.clip(goIn - goOut, -0.9, 0.9);
             liftPower = Range.clip(lift, -.5, .5);
 
@@ -128,9 +134,9 @@ public class PracticeOpModeTest extends TeleOp_Methods {
             frontShooter.setPower(shoot);
             wobblegoal.setPower(liftPower);
 
-            if (gamepad2.a)
-                intake.setPower(0.55);
-            if (gamepad2.b)
+            if (gamepad1.a)
+                intake.setPower(0.7);
+            if (gamepad1.b)
                 intake.setPower(0);
 
             //for shooter function and callibration
@@ -141,16 +147,17 @@ public class PracticeOpModeTest extends TeleOp_Methods {
             } else if (gamepad2.x) {
                 shoot = 0;
             } else if (gamepad2.y) {
-                shoot = 0.6;
-            }
+                shoot = 0.7;
+            } else if (gamepad2.dpad_up)
+                shoot = 0.55;
 
             if (gamepad2.left_bumper)
                 grabClose();
             if (gamepad2.right_bumper)
                 grabOpen();
                 //IMU align to goal/anything
-                //else if (gamepad1.left_bumper)
-                //    resetAngle();
+            else if (gamepad1.left_bumper)
+                resetAngle();
                 //else if (gamepad1.right_bumper) {
                 //check(0.4);
                 //sleep(250);
@@ -205,9 +212,8 @@ public class PracticeOpModeTest extends TeleOp_Methods {
             telemetry.addData("Angle: ", "%.2f", getAngle());
             telemetry.addData("correction: ", "%.2f", checkDirection());
             //Log.i("[philos:turnTest]", String.format("GettingAngle %.2f", getAngle()));
-
+            telemetry.addData("Current Drive Base Speed", baseSpeed);
             telemetry.update();
         }
     }
 }
-

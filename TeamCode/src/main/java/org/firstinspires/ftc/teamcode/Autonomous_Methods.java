@@ -43,7 +43,7 @@ public class Autonomous_Methods extends LinearOpMode {
         // Set PID proportional value to start reducing power at about 50 degrees of rotation.
         // P by itself may stall before turn completed so we add a bit of I (integral) which
         // causes the PID controller to gently increase power if the turn is not completed.
-        pidRotate = new PIDController(.015, .0003, 0);
+        pidRotate = new PIDController(.02, .0003, 0);
 
         // Set PID proportional value to produce non-zero correction value when robot veers off
         // straight line. P value controls how sensitive the correction is.
@@ -440,7 +440,7 @@ public class Autonomous_Methods extends LinearOpMode {
         robot.trigger.setPosition(0.475);
         sleep(200);
         robot.trigger.setPosition(0.71);
-        sleep(600);
+        sleep(200);
     }
 
     public void intake (double power) {

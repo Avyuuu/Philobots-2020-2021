@@ -474,8 +474,10 @@ public class TeleOp_Methods extends TeleOp_Members {
         trigger.setPosition(readyPosition);
         sleep(500);
          */
-        frontShooter.setPower(0.55);
-        strafeLeft(0.4, 22.25);
+
+        frontShooter.setPower(0.59);
+        sleep(1250);
+        //strafeLeft(0.4, 22.25);
         PIDrotate(0, 0.8);
         shoot();
         PIDrotate(6.5, 0.8);
@@ -534,10 +536,12 @@ public class TeleOp_Methods extends TeleOp_Members {
 
     public void grabOpen() {
         grab.setPosition(0.7);
+        sleep(200);
     }
 
     public void grabClose() {
         grab.setPosition(1);
+        sleep(200);
     }
 
     /**

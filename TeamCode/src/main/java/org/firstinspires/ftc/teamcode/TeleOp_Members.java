@@ -26,6 +26,7 @@ public class TeleOp_Members extends LinearOpMode {
     public DcMotorEx intake = null;
     public Servo trigger = null;
     public Servo grab = null;
+    public double baseSpeed = 1;
     //static final double     DRIVE_SPEED             = 0.6;
     //static final double     TURN_SPEED              = 0.5;
     BNO055IMU imu;
@@ -98,7 +99,7 @@ public class TeleOp_Members extends LinearOpMode {
         // Set PID proportional value to start reducing power at about 50 degrees of rotation.
         // P by itself may stall before turn completed so we add a bit of I (integral) which
         // causes the PID controller to gently increase power if the turn is not completed.
-        pidRotate = new PIDController(.013, 0.0000, .00);
+        pidRotate = new PIDController(.015, 0.0000, .00);
 
         // Set PID proportional value to produce non-zero correction value when robot veers off
         // straight line. P value controls how sensitive the correction is.
