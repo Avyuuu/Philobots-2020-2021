@@ -26,13 +26,9 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.firstinspires.ftc.teamcode;
-
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
-
-
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
@@ -45,40 +41,30 @@ import com.qualcomm.robotcore.util.Range;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-
 @TeleOp(name = "PracticeOpMode", group = "Linear Opmode")
 //@Disabled
 public class PracticeOpModeTest extends TeleOp_Methods {
-
     //OpenCvInternalCamera2 phoneCam;
     //StoneOrientationExample.StoneOrientationAnalysisPipeline pipeline;
-
-
     @Override
     public void runOpMode() throws InterruptedException {
-
         initRobot();
-
-
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftFrontPower, leftBackPower;
             double rightFrontPower, rightBackPower;
-            double intakePower, liftPower;
+            double intakePower, liftPower, turnPower;
             //boolean button_b, button_a;
             if (gamepad1.right_bumper && baseSpeed == 1) {
                 baseSpeed = 0.3;
-                sleep(200);
+                sleep(250);
             } else if (gamepad1.right_bumper && baseSpeed == 0.3) {
                 baseSpeed = 1;
-                sleep(200);
+                sleep(250);
             }
-
             // Choose to drive using either Tank Mode, or POV Mode
             // Comment out the method that's not used.  The default below is POV.
-
             /*// POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
             double drive = -gamepad1.left_stick_y;
@@ -92,7 +78,6 @@ public class PracticeOpModeTest extends TeleOp_Methods {
             // leftPower  = -gamepad1.left_stick_y ;
             // rightPower = -gamepad1.right_stick_y ;
             */
-
             //this is to use  left joystick to translate robot (y: front/back; x: strafing)
             //           use right joystick to turn
             double drive = -gamepad1.left_stick_y;
@@ -101,24 +86,22 @@ public class PracticeOpModeTest extends TeleOp_Methods {
             double goIn = gamepad2.right_trigger;
             double goOut = gamepad2.left_trigger;
             double lift = gamepad2.left_stick_x;
+            double turnRight = gamepad1.right_trigger;
+            double turnLeft = gamepad1.left_trigger;
             //double shoot = gamepad1.right_trigger;
-
-            leftFrontPower = (drive + turn + strafe) * baseSpeed;
-            rightFrontPower = (drive - turn - strafe) * baseSpeed;
-            rightBackPower = (drive - turn + strafe) * baseSpeed;
-            leftBackPower = (drive + turn - strafe) * baseSpeed;
+            leftFrontPower = (drive + (turn) + strafe) * baseSpeed;
+            rightFrontPower = (drive - (turn) - strafe) * baseSpeed;
+            rightBackPower = (drive - (turn) + strafe) * baseSpeed;
+            leftBackPower = (drive + (turn) - strafe) * baseSpeed;
             intakePower = Range.clip(goIn - goOut, -0.9, 0.9);
             liftPower = Range.clip(lift, -.5, .5);
-
-
+            turnPower = Range.clip(turnRight - turnLeft, -0.15, 0.15);
             if (gamepad2.dpad_right) {
                 shoot();
             }
             if (gamepad2.dpad_left)
                 shootThree();
-
             //shooterPower.setPower(shoot);
-
             // Send calculated power to wheels
             /*leftBackDrive.setPower(-leftPower);
             rightBackDrive.setPower(-rightPower);
@@ -126,31 +109,31 @@ public class PracticeOpModeTest extends TeleOp_Methods {
             rightFrontDrive.setPower(-rightPower);
             frontShooter.setPower(shooterPower);
             */
-            back_left.setPower(leftBackPower);
-            back_right.setPower(rightBackPower);
-            front_left.setPower(leftFrontPower);
-            front_right.setPower(rightFrontPower);
+            back_left.setPower(leftBackPower + turnPower);
+            back_right.setPower(rightBackPower - turnPower);
+            front_left.setPower(leftFrontPower + turnPower);
+            front_right.setPower(rightFrontPower - turnPower);
             //intake.setPower(intakePower);
             frontShooter.setPower(shoot);
             wobblegoal.setPower(liftPower);
-
-            if (gamepad1.a)
-                intake.setPower(0.7);
-            if (gamepad1.b)
+            if (gamepad1.a) {
+                intake.setPower(0.2);
+                transfer.setPower(1);
+            }
+            if (gamepad1.b) {
                 intake.setPower(0);
-
+                transfer.setPower(0);
+            }
             //for shooter function and callibration
             //
-
             if (shoot < 0) {
                 shoot = 0;
             } else if (gamepad2.x) {
                 shoot = 0;
             } else if (gamepad2.y) {
-                shoot = 0.7;
+                shoot = 0.65;
             } else if (gamepad2.dpad_up)
                 shoot = 0.55;
-
             if (gamepad2.left_bumper)
                 grabClose();
             if (gamepad2.right_bumper)
@@ -194,17 +177,13 @@ public class PracticeOpModeTest extends TeleOp_Methods {
                    sleep(100);
                    trigger.setPosition(readyPosition);
                    sleep(1000);
-
                 frontShooter.setPower(0);
-
         leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
-
 */
-
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left-back (%.2f), left-front (%.2f), right-back (%.2f), right-front (%.2f), frontShooter (%.2f), intake (%.2f)", leftBackPower, leftFrontPower, rightBackPower, rightFrontPower, shoot, intakePower);

@@ -436,6 +436,7 @@ public class TeleOp_Methods extends TeleOp_Members {
     }
 
     public void shootThree() {
+        resetAngle();
         trigger.setPosition(shootPosition);
         sleep(200);
         trigger.setPosition(readyPosition);
@@ -475,7 +476,7 @@ public class TeleOp_Methods extends TeleOp_Members {
         sleep(500);
          */
 
-        frontShooter.setPower(0.59);
+        frontShooter.setPower(0.55);
         sleep(1250);
         //strafeLeft(0.4, 22.25);
         PIDrotate(0, 0.8);

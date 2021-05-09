@@ -21,6 +21,7 @@ public class Hardware {
     public Servo trigger = null;
     public DcMotor wobblegoal = null;
     public Servo grab = null;
+    public DcMotor transfer = null;
 
 
     // Other variable names
@@ -62,7 +63,7 @@ public class Hardware {
         front_right.setDirection(DcMotor.Direction.FORWARD);
         back_left.setDirection(DcMotor.Direction.FORWARD);
         back_right.setDirection(DcMotor.Direction.FORWARD);
-        shooter.setDirection(DcMotor.Direction.FORWARD);
+        shooter.setDirection(DcMotor.Direction.REVERSE);
         wobblegoal.setDirection(DcMotor.Direction.FORWARD);
         intake.setDirection(DcMotor.Direction.REVERSE);
 
@@ -147,6 +148,7 @@ public class Hardware {
         trigger = hwMap.servo.get("trigger");
         intake = hwMap.dcMotor.get("intake");
         grab = hwMap.servo.get("grab");
+        transfer = hwMap.dcMotor.get("transfer");
 
         // Initialize Motors
         front_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -156,6 +158,7 @@ public class Hardware {
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wobblegoal.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         front_left.setDirection(DcMotor.Direction.REVERSE);
         front_right.setDirection(DcMotor.Direction.FORWARD);
@@ -163,7 +166,8 @@ public class Hardware {
         back_right.setDirection(DcMotor.Direction.FORWARD);
         wobblegoal.setDirection(DcMotorSimple.Direction.FORWARD);
         shooter.setDirection(DcMotor.Direction.FORWARD);
-        intake.setDirection(DcMotorSimple.Direction.FORWARD);
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        transfer.setDirection(DcMotorSimple.Direction.FORWARD);
 
         front_left.setPower(0);
         front_right.setPower(0);
@@ -187,6 +191,7 @@ public class Hardware {
         front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        transfer.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
 

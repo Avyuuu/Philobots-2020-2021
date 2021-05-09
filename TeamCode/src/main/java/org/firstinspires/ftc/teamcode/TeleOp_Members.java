@@ -26,16 +26,18 @@ public class TeleOp_Members extends LinearOpMode {
     public DcMotorEx intake = null;
     public Servo trigger = null;
     public Servo grab = null;
+    public DcMotor transfer = null;
     public double baseSpeed = 1;
     //static final double     DRIVE_SPEED             = 0.6;
     //static final double     TURN_SPEED              = 0.5;
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
     double globalAngle, power = .30, rotation, correction;
-    double readyPosition = 0.7, shootPosition = 0.475;
+    double readyPosition = 0.725, shootPosition = 0.475;
     double shoot = 0;
     boolean button_b = false, button_a = false;
     PIDController pidRotate, pidDrive, pidMovement;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -60,6 +62,7 @@ public class TeleOp_Members extends LinearOpMode {
         wobblegoal = hardwareMap.get(DcMotor.class, "wobbleArm");
         trigger = hardwareMap.servo.get("trigger");
         grab = hardwareMap.servo.get("grab");
+        transfer = hardwareMap.dcMotor.get("transfer");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -68,8 +71,9 @@ public class TeleOp_Members extends LinearOpMode {
         front_left.setDirection(DcMotor.Direction.REVERSE);
         front_right.setDirection(DcMotor.Direction.FORWARD);
         frontShooter.setDirection(DcMotor.Direction.FORWARD);
-        intake.setDirection(DcMotor.Direction.FORWARD);
+        intake.setDirection(DcMotor.Direction.REVERSE);
         wobblegoal.setDirection(DcMotorSimple.Direction.FORWARD);
+        transfer.setDirection(DcMotorSimple.Direction.FORWARD);
 
 
         back_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -79,6 +83,7 @@ public class TeleOp_Members extends LinearOpMode {
         frontShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         wobblegoal.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        transfer.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         frontShooter.setVelocityPIDFCoefficients(10, .5, 0, 11);
         intake.setVelocityPIDFCoefficients(10, .5, 01, 11);

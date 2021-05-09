@@ -213,7 +213,7 @@ public class Autonomous_Methods extends LinearOpMode {
             robot.front_right.setPower(speed + correction);
 
             if (useIntake)
-                intake(0.8);
+                intake(0.15, 1);
 
         }
 
@@ -257,7 +257,7 @@ public class Autonomous_Methods extends LinearOpMode {
             robot.back_right.setPower(speed - correction);
             robot.front_right.setPower(speed - correction);
             if (useIntake)
-                intake(0.8);
+                intake(0.15, 1);
         }
 
 
@@ -296,7 +296,7 @@ public class Autonomous_Methods extends LinearOpMode {
             robot.back_right.setPower(speed - correction);
             robot.front_right.setPower(speed + correction);
             if (useIntake)
-                intake(0.8);
+                intake(0.15, 1);
         }
 
 
@@ -339,7 +339,7 @@ public class Autonomous_Methods extends LinearOpMode {
             robot.back_right.setPower(speed + correction);
             robot.front_right.setPower(speed - correction);
             if (useIntake)
-                intake(0.8);
+                intake(0.15, 1);
         }
 
         //setting all motor powers to 0 (stopping)
@@ -439,13 +439,14 @@ public class Autonomous_Methods extends LinearOpMode {
 
         robot.trigger.setPosition(0.475);
         sleep(200);
-        robot.trigger.setPosition(0.71);
-        sleep(200);
+        robot.trigger.setPosition(0.72);
+        sleep(300);
     }
 
-    public void intake (double power) {
+    public void intake(double power1, double power2) {
 
-        robot.intake.setPower(power);
+        robot.intake.setPower(power1);
+        robot.transfer.setPower(power2);
 
     }
 
