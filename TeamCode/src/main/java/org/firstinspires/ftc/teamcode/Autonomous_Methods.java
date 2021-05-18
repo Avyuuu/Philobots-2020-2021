@@ -137,6 +137,7 @@ public class Autonomous_Methods extends LinearOpMode {
 
         // reset angle tracking on new heading.
         //resetAngle();
+        
     }
 
     /**
@@ -184,6 +185,414 @@ public class Autonomous_Methods extends LinearOpMode {
 
         return globalAngle;
     }
+    public void nullleftRedAuto(boolean getSingleRing, boolean getQuadRing, boolean powerShots)
+    {
+        strafeLeft(0.6,3,true, false); //This segment is for the LEFT RED TAPE
+        forward(0.7,29,false,false);
+        if(powerShots)
+            shooter(0.45); //power for power shots
+        else if (!getSingleRing || !getQuadRing){
+            shooter(.6);
+        }
+        else{
+            shooter(0.65);
+
+        }
+
+        if(powerShots)
+        {
+            PIDrotate(6,1); trigger();
+            PIDrotate(-6,1); trigger();
+            PIDrotate(0,1); trigger();
+            shooter(0.65);
+            strafeRight(0.6,14,true,false);
+        }
+        else if (!getSingleRing || !getQuadRing) {
+            PIDrotate(-16, 1); //shooting the ring at an angle for high goal
+            trigger();
+            trigger();
+            trigger();
+            PIDrotate(0, 1);
+            shooter(0);
+        }
+        else {
+            if(getSingleRing || getQuadRing) {shooter(0.65);}
+            strafeRight(0.6,14,true,true);
+            trigger();
+            trigger();
+            trigger();
+            trigger();
+            shooter(0);
+        }
+        /**
+         * This is what we are going to do after in case this works better and we need to get the single ring
+         *
+         */
+        if(getSingleRing) {
+            intake(1);shooter(0.65);
+            backward(0.4, 9, true, true); //getting the single ring
+            forward(0.7, 8, true, true);
+            trigger();
+            trigger();
+            trigger();
+            if(getQuadRing){
+                backward(0.4,20, true, true);
+                forward(0.8,19,true,true);
+                trigger();trigger();trigger();
+            }
+        }
+        //strafeLeft(0.5, 12, false, false); //move out of the way and park
+        forward(0.9,6,true, false);
+        shooter(0);
+    }
+    public void quadCenterOnLeftRedTape()
+    {
+        strafeLeft(0.7, 7, true, false);
+        forward(0.85, 52, true, false);
+        sleep(50);
+        strafeRight(0.6, 19, true, false);
+        shooter(0.65);
+        arm(0.8, 1325);
+        grabOpen();
+        arm(0.8, -1100);
+        backward(0.9, 23.5, true, false);
+        // strafeLeft(0.5,3.5);
+        intake(0.3, 1);
+        strafeLeft(0.6, 7, true, false);
+        sleep(200);
+        PIDrotate(0, 0.8);
+        trigger();
+        trigger();
+        trigger();
+        trigger();
+        backward(0.3, 4, true, false);
+
+        backward(0.3, 6, true, true);
+        PIDrotate(0, 0.9);
+        forward(0.9, 9.5, true, true);
+        sleep(100);
+        PIDrotate(0, 1);
+        trigger();
+        trigger();
+        trigger();
+        backward(0.6, 19, true, false);
+        PIDrotate(0, 0.9);
+        forward(0.9, 17.5, true, true);
+        sleep(200);
+        PIDrotate(0, 1);
+        trigger();
+        trigger();
+        sleep(100);
+        trigger();
+        forward(0.9, 6, false, false);
+        intake(0, 0);
+    }
+    public void nullRightBlueAuto(boolean getSingleRing, boolean getQuadRing, boolean powerShots)
+    {
+
+        strafeRight(0.4,3.5,true, false); //This segment is for the RI=GHT BLUE TAPE
+        forward(0.7,30,false,false);
+        if(powerShots) shooter(0.45); //power for power shots
+        else
+            shooter(0.63);
+        if(powerShots)
+        {
+            PIDrotate(6,1); trigger();
+            PIDrotate(-6,1); trigger();
+            PIDrotate(0,1); trigger();
+            shooter(0.65);
+            strafeLeft(0.6,14,true,false);
+        }
+        else if (!getSingleRing || !getQuadRing) {
+            PIDrotate(18, 1); //shooting the ring at an angle for high goal
+            trigger();
+            trigger();
+            trigger();
+            PIDrotate(0, 1);
+            shooter(0);
+        }
+        else {
+            if(getSingleRing || getQuadRing) {shooter(0.65);}
+            strafeLeft(0.6,14.5,true,true);
+            sleep(500);
+            trigger();
+            trigger();
+            trigger();
+            trigger();
+            shooter(0);
+        }
+        /**
+         * This is what we are going to do after in case this works better and we need to get the single ring
+         *
+         */
+        if(getSingleRing) {
+            intake(1,0.6);shooter(0.65);
+            backward(0.4, 9, true, true); //getting the single ring
+            forward(0.7, 8, true, true);
+            trigger();
+            trigger();
+            trigger();
+            if(getQuadRing){
+                backward(0.4,20, true, true);
+                forward(0.8,19,true,true);
+                trigger();trigger();sleep(300);trigger();
+            }
+        }
+        strafeRight(0.5, 12, false, false); //move out of the way and park
+        forward(0.9,6.8,true, false);
+        shooter(0);
+    }
+    public void tausBlueAuto()
+    {
+
+         //This segment is for the  RIGHT wheel on RIgHT BLUE TAPE
+        shooter(.63);
+        forward(0.7,27,true,false); // go deliver wobble goal
+        PIDrotate(16, 1); //shooting the ring at an angle for high goal
+        trigger();
+        trigger();
+        trigger();
+        PIDrotate(0, 1);
+        shooter(0);
+        forward(0.7,28,true,false);
+        strafeLeft(.7, 16, true, false);
+        PIDrotate(130,1);
+
+        arm(0.8, 1325);
+        grabOpen();
+        arm(0.8, -1100);
+
+
+
+        PIDrotate(0,.4);
+        strafeRight(.7, 14, true, false);
+        backward(0.7,26,true,false);
+        sleep(500);
+        intake(1,0.6);shooter(0.65);
+
+        strafeLeft(.7, 10, true, false);
+        sleep(500);
+        backward(0.4, 9, true, true); //getting the single ring
+        forward(0.7, 8, true, true);
+        trigger();
+        trigger();
+        trigger();
+        backward(0.4,20, true, true);
+        forward(0.8,19,true,true);
+        trigger();trigger();sleep(300);trigger();
+
+       // strafeRight(0.5, 12, false, false); //move out of the way and park
+        //forward(0.9,6.8,true, false);
+        //shooter(0);
+    }
+    public void nullInnerTapeAuto(String alliance, boolean getSingleRing, boolean getQuadRing, boolean powerShots)
+    {
+        if (alliance.equals("red")){
+            nullleftRedAuto(getSingleRing, getQuadRing, powerShots);
+        } else if (alliance.equals("blue")){
+            nullRightBlueAuto(getSingleRing, getQuadRing, powerShots);
+        }
+    }
+    public void nullRightRedAuto(boolean getSingleRing, boolean getQuadRing, boolean powerShots)
+    {
+        strafeRight(0.6,6,false, false); //This segment is for the RIGHT RED TAPE
+        if(powerShots)
+            shooter(0.45); //power for power shots
+        else
+            shooter(0.65);
+        forward(0.7,28,false,false);
+        if(powerShots)
+        {
+            strafeLeft(0.6,3,false,false);
+            PIDrotate(16,1); trigger();
+            PIDrotate(16,1); trigger();
+            PIDrotate(25,1); trigger();
+            shooter(0.65);
+            PIDrotate(0,1);
+            strafeLeft(0.6,13,true,false);
+        }
+        else if (!getSingleRing || !getQuadRing) { //This is for 0 ZERO 0 ZERO 0 ZERO rings
+            shooter(0.65);
+            strafeLeft(0.6,3,false,false);
+            PIDrotate(16, 1); //shooting the ring at an angle for high goal
+            trigger();
+            trigger();
+            trigger();
+            PIDrotate(0, 1);
+            shooter(0); //intake(0);
+            sleep(5000);
+            strafeLeft(0.5, 13, false, false); //move out of the way and park
+        }
+        else {
+            strafeLeft(0.6,13,true,true);
+            trigger();
+            trigger();
+            trigger();
+            trigger();
+            shooter(0);
+        }
+        /**
+         * This is what we are going to do after in case this works better and we need to get the single ring
+         *
+         */
+        if(getSingleRing) {
+            intake(1);shooter(0.65);
+            backward(0.4, 9, true, true); //getting the single ring
+            forward(0.7, 8, true, true);
+            trigger();
+            trigger();
+            trigger();
+            if(getQuadRing){
+                backward(0.4,20, true, true);
+                forward(0.8,19,true,true);
+                trigger(); trigger(); trigger();
+            }
+        }
+        forward(0.9,6,true, false);
+        shooter(0);
+    }
+    public void nullOuterTapeAuto(String alliance, boolean getSingleRing, boolean getQuadRing, boolean powerShots)
+    {
+        if (alliance.equals("red")){
+            nullRightRedAuto(getSingleRing, getQuadRing, powerShots);
+        } else if (alliance.equals("blue")){
+            nullRightBlueAuto(getSingleRing, getQuadRing, powerShots);
+        }
+    }
+    public void autoRedMoreRingsFour()
+    {
+        strafeRight(0.85, 17, true, false);
+        forward(0.85, 52, true, false);
+        sleep(50);
+        strafeLeft(0.6, 19, true, false);
+        shooter(0.71);
+        PIDrotate(180,1);
+        arm(0.8, 1325);
+        grabOpen();
+        arm(0.8, -1100);
+        PIDrotate(-180,1);
+        backward(0.9, 22.5, true, false);
+        // strafeLeft(0.5,3.5);
+        strafeRight(0.6, 4, true, false);
+        PIDrotate(0, 1);
+        sleep(100);
+        trigger();
+        trigger();
+        trigger();
+        trigger();
+        intake(0.9);
+        backward(0.6, 6.5, false, false);
+
+        backward(0.1, 3, false, true);
+        PIDrotate(0, 0.9);
+        forward(0.9, 7, true, true);
+
+        trigger();
+        trigger();
+        trigger();
+        backward(0.6, 8, false, false);
+        backward(0.1, 6, false, true);
+        PIDrotate(0, 0.9);
+        forward(0.9, 9.5, true, true);
+
+        trigger();
+        trigger();
+        trigger();
+        forward(0.9, 9, false, false);
+        intake(0);
+    }
+    public void reverseNoneRed(boolean startPos){
+        if(startPos == true){
+
+            shooter(0.65);
+            forward(0.65, 28, true, false);
+            strafeRight(0.65, 5.5, true, false);
+            sleep(200);
+            trigger();
+            sleep(100);
+            trigger();
+            sleep(100);
+            trigger();
+            shooter(0);
+            forward(0.65, 2, true, false);
+            strafeRight(0.65, 4, true, false);
+            arm(0.6, 1325);
+            grabOpen();
+            arm(0.6, -600);
+            strafeLeft(.8, 16, true, false);
+            forward(0.65, 2, true, false);
+
+        }
+        else{
+
+            forward(0.65, 12, true, false);
+            strafeLeft(0.4, 8, true, false);
+            shooter(0.65);
+            forward(0.65, 13, true, false);
+            sleep(200);
+            trigger();
+            sleep(100);
+            trigger();
+            sleep(100);
+            trigger();
+            shooter(0);
+            forward(0.65, 6, true, false);
+            strafeRight(0.65, 5.5, true, false);
+            arm(0.6, 1325);
+            sleep(500);
+            grabOpen();
+            sleep(500);
+            arm(0.6, -500);
+            strafeLeft(.8, 16, true, false);
+
+
+        }
+
+
+    }
+    public void reverseNoneBlue(boolean startPos){
+        if(startPos == true){
+
+            shooter(0.65);
+            forward(0.65, 28, true, false);
+            strafeLeft(0.65, 5.5, true, false);
+            sleep(200);
+            trigger();
+            sleep(100);
+            trigger();
+            sleep(100);
+            trigger();
+            shooter(0);
+            forward(0.65, 2, true, false);
+            strafeLeft(0.65, 4, true, false);
+            arm(0.6, 1325);
+            grabOpen();
+            arm(0.6, -600);
+            strafeRight(.8, 14, true, false);
+            forward(0.65, 2, true, false);
+
+        }
+        else{
+
+            forward(0.65, 12, true, false);
+            strafeRight(0.4, 8, true, false);
+            shooter(0.65);
+            forward(0.65, 15, true, false);
+            sleep(200);
+            trigger();
+            sleep(100);
+            trigger();
+            sleep(100);
+            trigger();
+            shooter(0);
+            strafeLeft(0.65, 28.28, true, false);
+            arm(0.6, 1325);
+            grabOpen();
+            arm(0.6, -320);
+
+        }
+
+    }
 
 
     public void forward(double speed, double distance, boolean usePidRotate, boolean useIntake) {
@@ -213,7 +622,7 @@ public class Autonomous_Methods extends LinearOpMode {
             robot.front_right.setPower(speed + correction);
 
             if (useIntake)
-                intake(0.15, 1);
+                intake(0.8);
 
         }
 
@@ -257,7 +666,50 @@ public class Autonomous_Methods extends LinearOpMode {
             robot.back_right.setPower(speed - correction);
             robot.front_right.setPower(speed - correction);
             if (useIntake)
-                intake(0.15, 1);
+                intake(0.8);
+        }
+
+
+        //setting all motor powers to 0 (stopping)
+        robot.back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        if (usePidRotate)
+            PIDrotate(0,0.8);
+
+    }
+    public void backwardNoCorrection(double speed, double distance, boolean usePidRotate, boolean useIntake) {
+
+
+        //RPM for GoBuilda YEllow Jacket planetary gear motors
+        int counts = (int) ((distance / (4 * Math.PI)) * 1200);
+
+        robot.back_left.setTargetPosition(-counts);
+        robot.back_right.setTargetPosition(-counts);
+        robot.front_right.setTargetPosition(-counts);
+        robot.front_left.setTargetPosition(-counts);
+
+        //setting all motors to go forward (positive)
+
+        robot.back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.back_left.setPower(-speed);
+        robot.back_right.setPower(-speed);
+        robot.front_right.setPower(-speed);
+        robot.front_left.setPower(-speed);
+
+        while (opModeIsActive() && robot.back_left.isBusy() && robot.back_right.isBusy() && robot.front_right.isBusy() && robot.front_left.isBusy()) {
+
+            robot.back_left.setPower(speed);
+            robot.front_left.setPower(speed);
+            robot.back_right.setPower(speed);
+            robot.front_right.setPower(speed);
+            if (useIntake)
+                intake(0.8);
         }
 
 
@@ -279,6 +731,8 @@ public class Autonomous_Methods extends LinearOpMode {
         robot.back_right.setTargetPosition(-counts);
         robot.front_right.setTargetPosition(counts);
         robot.front_left.setTargetPosition(-counts);
+        if (usePidRotate)
+            PIDrotate(0,0.8);
 
         robot.back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -289,6 +743,7 @@ public class Autonomous_Methods extends LinearOpMode {
         robot.front_right.setPower(speed);
         robot.front_left.setPower(-speed);
 
+
         while (opModeIsActive() && robot.back_left.isBusy() && robot.back_right.isBusy() && robot.front_right.isBusy() && robot.front_left.isBusy()) {
             double correction = pidDrive.performPID(getAngle());
             robot.back_left.setPower(speed - correction);
@@ -296,7 +751,8 @@ public class Autonomous_Methods extends LinearOpMode {
             robot.back_right.setPower(speed - correction);
             robot.front_right.setPower(speed + correction);
             if (useIntake)
-                intake(0.15, 1);
+                intake(0.8);
+
         }
 
 
@@ -306,10 +762,51 @@ public class Autonomous_Methods extends LinearOpMode {
         robot.front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+
+
+    }
+    public void strafeLeftNoCorrection(double speed, double distance, boolean usePidRotate, boolean useIntake) {
+
+        int counts = (int) ((distance / (4 * Math.PI)) * 1200);
+        robot.back_left.setTargetPosition(counts);
+        robot.back_right.setTargetPosition(-counts);
+        robot.front_right.setTargetPosition(counts);
+        robot.front_left.setTargetPosition(-counts);
         if (usePidRotate)
             PIDrotate(0,0.8);
 
+        robot.back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.back_left.setPower(speed);
+        robot.back_right.setPower(-speed);
+        robot.front_right.setPower(speed);
+        robot.front_left.setPower(-speed);
+
+
+        while (opModeIsActive() && robot.back_left.isBusy() && robot.back_right.isBusy() && robot.front_right.isBusy() && robot.front_left.isBusy()) {
+
+            robot.back_left.setPower(speed);
+            robot.front_left.setPower(-speed);
+            robot.back_right.setPower(speed);
+            robot.front_right.setPower(-speed);
+            if (useIntake)
+                intake(0.8);
+
+        }
+
+
+        //setting all motor powers to 0 (stopping)
+        robot.back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+
     }
+
 
     public void strafeRight(double speed, double distance, boolean usePidRotate, boolean useIntake) {
 
@@ -319,6 +816,9 @@ public class Autonomous_Methods extends LinearOpMode {
         robot.back_right.setTargetPosition(counts);
         robot.front_right.setTargetPosition(-counts);
         robot.front_left.setTargetPosition(counts);
+
+        if (usePidRotate)
+            PIDrotate(0,0.8);
 
         //setting all motors to go forward (positive)
 
@@ -333,13 +833,14 @@ public class Autonomous_Methods extends LinearOpMode {
 
 
         while (opModeIsActive() && robot.back_left.isBusy() && robot.back_right.isBusy() && robot.front_right.isBusy() && robot.front_left.isBusy()) {
+
             double correction = pidDrive.performPID(getAngle());
             robot.back_left.setPower(speed + correction);
             robot.front_left.setPower(speed - correction);
             robot.back_right.setPower(speed + correction);
             robot.front_right.setPower(speed - correction);
             if (useIntake)
-                intake(0.15, 1);
+                intake(0.8);
         }
 
         //setting all motor powers to 0 (stopping)
@@ -439,14 +940,13 @@ public class Autonomous_Methods extends LinearOpMode {
 
         robot.trigger.setPosition(0.475);
         sleep(200);
-        robot.trigger.setPosition(0.72);
-        sleep(300);
+        robot.trigger.setPosition(0.71);
+        sleep(200);
     }
 
-    public void intake(double power1, double power2) {
+    public void intake (double power) {
 
-        robot.intake.setPower(power1);
-        robot.transfer.setPower(power2);
+        robot.intake.setPower(power);
 
     }
 
@@ -487,6 +987,12 @@ public class Autonomous_Methods extends LinearOpMode {
         telemetry.addData("front_left Encoder Value", (start_front_left - end_front_left));
         telemetry.addData("front_right Encoder Value", (start_front_right - end_front_right));
         telemetry.update();
+
+    }
+    public void intake(double power1, double power2) {
+
+        robot.intake.setPower(power1);
+        robot.transfer.setPower(power2);
 
     }
 
