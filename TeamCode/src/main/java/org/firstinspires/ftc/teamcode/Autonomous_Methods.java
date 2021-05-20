@@ -137,7 +137,7 @@ public class Autonomous_Methods extends LinearOpMode {
 
         // reset angle tracking on new heading.
         //resetAngle();
-        
+
     }
 
     /**
@@ -345,7 +345,7 @@ public class Autonomous_Methods extends LinearOpMode {
     public void tausBlueAuto()
     {
 
-         //This segment is for the  RIGHT wheel on RIgHT BLUE TAPE
+        //This segment is for the  RIGHT wheel on RIgHT BLUE TAPE
         shooter(.63);
         forward(0.7,27,true,false); // go deliver wobble goal
         PIDrotate(16, 1); //shooting the ring at an angle for high goal
@@ -381,7 +381,7 @@ public class Autonomous_Methods extends LinearOpMode {
         forward(0.8,19,true,true);
         trigger();trigger();sleep(300);trigger();
 
-       // strafeRight(0.5, 12, false, false); //move out of the way and park
+        // strafeRight(0.5, 12, false, false); //move out of the way and park
         //forward(0.9,6.8,true, false);
         //shooter(0);
     }
@@ -591,6 +591,118 @@ public class Autonomous_Methods extends LinearOpMode {
             arm(0.6, -320);
 
         }
+
+    }
+
+    public void autoRedCarry( boolean getSingleRing1WG, boolean getQuadRing, boolean getZeroRing) {
+
+
+        if(getZeroRing) {
+
+            shooter(0.65);
+            forward(0.7, 28, true, false);
+            strafeRight(0.7, 5.5, true, false);
+            trigger();
+            trigger();
+            trigger();
+            shooter(0);
+            forward(0.65, 6, true, false);
+            strafeRight(0.65, 6.5, true, false);
+            arm(0.6, 1325);
+            grabOpen();
+            sleep(100);
+            arm(0.6, -320);
+            strafeLeft(0.7, 9.75, true, false);
+            backward(0.7, 28.5, true, false);
+            arm(0.6, 310);
+            forward(0.1, 2, true, false);
+            grabClose();
+            sleep(200);
+            forward(0.7, 29.5, true, false);
+            strafeRight(0.7, 7.5, true, false);
+            grabOpen();
+            arm(0.6, -950);
+            sleep(200);
+            strafeLeft(0.6, 6, false, false);
+            grabOpen();
+
+        }
+
+        if(getSingleRing1WG) {
+
+            strafeLeft(0.9, 5.5, true, false);
+//          forward(0.5, 44);
+            forward(0.9, 44, true, false);
+            strafeRight(0.6, 5, true, false);
+            shooter(0.65);
+            arm(0.9, 1325);
+            sleep(100);
+            grabOpen();
+            arm(0.9, -440);
+            backward(0.7, 14, true, false);
+            strafeRight(0.7, 4, true, false);
+            intake(0.2, 1);
+            PIDrotate(0, 1);
+            sleep(200);
+            trigger();
+            sleep(200);
+            trigger();
+            sleep(200);
+            trigger();
+            backward(0.6, 11, true, false);
+            forward(0.6, 11, true, false);
+            PIDrotate(0, 0.8);
+            trigger();
+            trigger();
+            intake(0, 0);
+            forward (1, 2, false, false);
+
+        }
+
+        if(getQuadRing) {
+
+
+            strafeLeft(0.7, 5.5, true, false);
+            forward(0.85, 52, true, false);
+            sleep(50);
+            strafeRight(0.6, 19, true, false);
+            shooter(0.65);
+            arm(0.8, 1325);
+            grabOpen();
+            arm(0.8, -1100);
+            backward(0.9, 23.5, true, false);
+            // strafeLeft(0.5,3.5);
+            intake(0.3, 1);
+            strafeLeft(0.6, 5, true, false);
+            sleep(200);
+            PIDrotate(0, 0.8);
+            trigger();
+            trigger();
+            trigger();
+            trigger();
+            backward(0.6, 5.5, true, false);
+
+            backward(0.3, 6, true, true);
+            PIDrotate(0, 0.9);
+            forward(0.9, 9.5, true, true);
+            sleep(100);
+            PIDrotate(0, 1);
+            trigger();
+            trigger();
+            trigger();
+            backward(0.6, 19, true, false);
+            PIDrotate(0, 0.9);
+            forward(0.9, 17.5, true, true);
+            sleep(200);
+            PIDrotate(0, 1);
+            trigger();
+            trigger();
+            sleep(100);
+            trigger();
+            forward(0.9, 6, false, false);
+            intake(0, 0);
+        }
+
 
     }
 
@@ -1012,6 +1124,5 @@ public class Autonomous_Methods extends LinearOpMode {
 
     }
 }
-
 
 
