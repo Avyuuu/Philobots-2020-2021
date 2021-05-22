@@ -415,6 +415,115 @@ public class Autonomous_Methods extends LinearOpMode {
 
 
     }
+    public void autoBlueCarry( boolean getSingleRing1WG, boolean getQuadRing, boolean getZeroRing) {
+
+
+        if(getZeroRing) {
+            sleep(3000);
+
+            shooter(0.65);
+            forward(0.7, 28, true, false);
+            strafeLeft(0.7, 5.5, true, false);
+            trigger();
+            trigger();
+            trigger();
+            shooter(0);
+            forward(0.65, 6, true, false);
+            strafeLeft(0.65, 6.5, true, false);
+            PIDrotate(130,.2);
+            arm(0.6, 1325);
+            grabOpen();
+            sleep(200);
+            arm(0.6, -320);
+            PIDrotate(0,0.1);
+            strafeRight(0.7, 9.75, true, false);
+
+
+        }
+
+        if(getSingleRing1WG) {
+
+            strafeRight(0.9, 5.5, true, false);
+//          forward(0.5, 44);
+            forward(0.9, 44, true, false);
+            strafeLeft(0.6, 5, true, false);
+            shooter(0.66);
+            PIDrotate(130,.2);
+            arm(0.9, 1325);
+            sleep(100);
+            grabOpen();
+            arm(0.9, -440);
+            PIDrotate(0,.1);
+            backward(0.7, 13, true, false);
+            strafeLeft(0.7, 7.5, true, false);
+            intake(0.2, 1);
+            PIDrotate(0, 1);
+            sleep(200);
+            trigger();
+            sleep(200);
+            trigger();
+            sleep(200);
+            trigger();
+            backward(0.6, 11, true, false);
+            forward(0.6, 11, true, false);
+            PIDrotate(0, 0.8);
+            trigger();
+            trigger();
+            intake(0, 0);
+
+
+
+        }
+
+        if(getQuadRing) {
+            strafeRight(0.7, 7, true, false);
+            forward(0.85, 54, true, false);
+            sleep(50);
+            strafeLeft(0.6, 19, true, false);
+            shooter(0.65);
+            PIDrotate(130,0.8);
+            arm(0.8, 1325);
+            sleep(200);
+            grabOpen();
+            sleep(200);
+            arm(0.8, -1100);
+            PIDrotate(0,0.8);
+            backward(0.9, 24, true, false);
+            // strafeLeft(0.5,3.5);
+            intake(0.6, 1);
+            strafeRight(0.6, 5, true, false);
+            sleep(200);
+            PIDrotate(0, 0.8);
+            trigger();
+            trigger();
+            trigger();
+            trigger();
+
+
+            backward(0.3, 10, true, false);
+            PIDrotate(0, 0.9);
+            forward(0.9, 8.5, true, false);
+            sleep(100);
+            PIDrotate(0, 1);
+            trigger();
+            trigger();
+            trigger();
+            backward(0.4, 19, true, false);
+            PIDrotate(0, 0.9);
+            forward(0.9, 17.5, true, false );
+            sleep(200);
+            PIDrotate(0, 1);
+            trigger();
+            trigger();
+            sleep(100);
+            trigger();
+            forward(0.9, 2, false, false);
+            intake(0, 0);
+
+        }
+
+
+    }
     public void OneWBNoIntakeRightRed(boolean single)
     {
         if(single){
@@ -1021,7 +1130,38 @@ public class Autonomous_Methods extends LinearOpMode {
         if (usePidRotate)
             PIDrotate(0,0.8);
 
+        robot.back_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.back_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.front_right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.front_left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.back_left.setPower(speed);
+        robot.back_right.setPower(-speed);
+        robot.front_right.setPower(speed);
+        robot.front_left.setPower(-speed);
+
+
+        while (opModeIsActive() && robot.back_left.isBusy() && robot.back_right.isBusy() && robot.front_right.isBusy() && robot.front_left.isBusy()) {
+
+            robot.back_left.setPower(speed);
+            robot.front_left.setPower(-speed);
+            robot.back_right.setPower(speed);
+            robot.front_right.setPower(-speed);
+            if (useIntake)
+                intake(0.8);
+
+        }
+
+
+        //setting all motor powers to 0 (stopping)
+        robot.back_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.back_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.front_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.front_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+
     }
+
 
     public void strafeLeft(double speed, double distance, boolean usePidRotate, boolean useIntake) {
 
