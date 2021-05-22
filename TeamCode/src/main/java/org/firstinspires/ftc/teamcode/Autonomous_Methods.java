@@ -191,9 +191,9 @@ public class Autonomous_Methods extends LinearOpMode {
             sleep(4000);
             shooter(.65);
             strafeRight(0.6,8.5,true, false); //This segment is for the LEFT RED TAPE
-            forward(0.7,28,true,false);
+            forward(0.7,26,true,false);
             strafeLeft(0.3,2,true, false);
-            PIDrotate(-14, 1); //shooting the ring at an angle for high goal
+            PIDrotate(14, 1); //shooting the ring at an angle for high goal
             trigger();
             trigger();
             trigger();
@@ -204,10 +204,10 @@ public class Autonomous_Methods extends LinearOpMode {
         else{
             sleep(4000);
             shooter(.65);
-            strafeRight(0.6,24,true, false); //This segment is for the LEFT RED TAPE
+            strafeRight(0.4,22,true, false); //This segment is for the LEFT RED TAPE
             forward(0.7,28,true,false);
             strafeLeft(0.3,2,true, false);
-            PIDrotate(-14, 1); //shooting the ring at an angle for high goal
+            PIDrotate(14, 1); //shooting the ring at an angle for high goal
             trigger();
             trigger();
             trigger();
@@ -588,7 +588,7 @@ public class Autonomous_Methods extends LinearOpMode {
     public void tausBlueAuto()
     {
 
-         //This segment is for the  RIGHT wheel on RIgHT BLUE TAPE
+        //This segment is for the  RIGHT wheel on RIgHT BLUE TAPE
         shooter(.65);
         forward(0.7,27,true,false); // go deliver wobble goal
         PIDrotate(16, 1); //shooting the ring at an angle for high goal
@@ -615,7 +615,7 @@ public class Autonomous_Methods extends LinearOpMode {
 
 
 
-       // strafeRight(0.5, 12, false, false); //move out of the way and park
+        // strafeRight(0.5, 12, false, false); //move out of the way and park
         //forward(0.9,6.8,true, false);
         //shooter(0);
     }
@@ -1311,6 +1311,5 @@ public class Autonomous_Methods extends LinearOpMode {
 
     }
 }
-
 
 
