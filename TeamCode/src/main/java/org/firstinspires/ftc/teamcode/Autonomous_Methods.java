@@ -54,6 +54,7 @@ public class Autonomous_Methods extends LinearOpMode {
         pidDrive.setOutputRange(0, 0.3);
         pidDrive.setInputRange(-90, 90);
         pidDrive.enable();
+        resetAngle();
 
         telemetry.addData("gyro status :: ", imu.getCalibrationStatus().toString()); //returning gyro status (ready to start)
         telemetry.update();
@@ -185,6 +186,74 @@ public class Autonomous_Methods extends LinearOpMode {
 
         return globalAngle;
     }
+    public void zeroBlueNull(boolean right){
+        if(right){
+            sleep(4000);
+            shooter(.65);
+            strafeRight(0.6,8.5,true, false); //This segment is for the LEFT RED TAPE
+            forward(0.7,28,true,false);
+            strafeLeft(0.3,2,true, false);
+            PIDrotate(-14, 1); //shooting the ring at an angle for high goal
+            trigger();
+            trigger();
+            trigger();
+            PIDrotate(0, 1);
+            shooter(0);
+            forward(0.9,4,true, false);
+        }
+        else{
+            sleep(4000);
+            shooter(.65);
+            strafeRight(0.6,24,true, false); //This segment is for the LEFT RED TAPE
+            forward(0.7,28,true,false);
+            strafeLeft(0.3,2,true, false);
+            PIDrotate(-14, 1); //shooting the ring at an angle for high goal
+            trigger();
+            trigger();
+            trigger();
+            PIDrotate(0, 1);
+            shooter(0);
+            forward(0.9,4,true, false);
+
+        }
+
+    }
+    public void zeroRedNull(boolean left){
+        if(left){
+            sleep(4000);
+            shooter(.65);
+            strafeLeft(0.6,8.5,true, false); //This segment is for the LEFT RED TAPE
+            forward(0.7,28,true,false);
+            strafeRight(0.3,2,true, false);
+            PIDrotate(-14, 1); //shooting the ring at an angle for high goal
+            trigger();
+            trigger();
+            trigger();
+            PIDrotate(0, 1);
+            shooter(0);
+            forward(0.9,4,true, false);
+        }
+        else{
+            sleep(4000);
+            shooter(.65);
+            strafeLeft(0.6,24,true, false); //This segment is for the LEFT RED TAPE
+            forward(0.7,28,true,false);
+            strafeRight(0.3,2,true, false);
+            PIDrotate(-14, 1); //shooting the ring at an angle for high goal
+            trigger();
+            trigger();
+            trigger();
+            PIDrotate(0, 1);
+            shooter(0);
+            forward(0.9,4,true, false);
+
+        }
+
+
+
+
+
+    }
     public void nullleftRedAuto(boolean getSingleRing, boolean getQuadRing, boolean powerShots)
     {
         strafeLeft(0.6,3,true, false); //This segment is for the LEFT RED TAPE
@@ -208,7 +277,7 @@ public class Autonomous_Methods extends LinearOpMode {
             strafeRight(0.6,14,true,false);
         }
         else if (!getSingleRing || !getQuadRing) {
-            PIDrotate(-16, 1); //shooting the ring at an angle for high goal
+            PIDrotate(-14, 1); //shooting the ring at an angle for high goal
             trigger();
             trigger();
             trigger();
@@ -245,56 +314,229 @@ public class Autonomous_Methods extends LinearOpMode {
         forward(0.9,6,true, false);
         shooter(0);
     }
-    public void quadCenterOnLeftRedTape()
-    {
-        strafeLeft(0.7, 7, true, false);
-        forward(0.85, 52, true, false);
-        sleep(50);
-        strafeRight(0.6, 19, true, false);
-        shooter(0.65);
-        arm(0.8, 1325);
-        grabOpen();
-        arm(0.8, -1100);
-        backward(0.9, 23.5, true, false);
-        // strafeLeft(0.5,3.5);
-        intake(0.3, 1);
-        strafeLeft(0.6, 7, true, false);
-        sleep(200);
-        PIDrotate(0, 0.8);
-        trigger();
-        trigger();
-        trigger();
-        trigger();
-        backward(0.3, 4, true, false);
+    public void autoRedCarry( boolean getSingleRing1WG, boolean getQuadRing, boolean getZeroRing) {
 
-        backward(0.3, 6, true, true);
-        PIDrotate(0, 0.9);
-        forward(0.9, 9.5, true, true);
-        sleep(100);
+
+        if(getZeroRing) {
+            sleep(3000);
+
+            shooter(0.65);
+            forward(0.7, 28, true, false);
+            strafeRight(0.7, 5.5, true, false);
+            trigger();
+            trigger();
+            trigger();
+            shooter(0);
+            forward(0.65, 6, true, false);
+            strafeRight(0.65, 6.5, true, false);
+            arm(0.6, 1325);
+            grabOpen();
+            sleep(100);
+            arm(0.6, -320);
+            strafeLeft(0.7, 9.75, true, false);
+
+
+        }
+
+        if(getSingleRing1WG) {
+
+            strafeLeft(0.9, 5.5, true, false);
+//          forward(0.5, 44);
+            forward(0.9, 44, true, false);
+            strafeRight(0.6, 5, true, false);
+            shooter(0.66);
+            arm(0.9, 1325);
+            sleep(100);
+            grabOpen();
+            arm(0.9, -440);
+            backward(0.7, 13, true, false);
+            strafeRight(0.7, 7.5, true, false);
+            intake(0.2, 1);
+            PIDrotate(0, 1);
+            sleep(200);
+            trigger();
+            sleep(200);
+            trigger();
+            sleep(200);
+            trigger();
+            backward(0.6, 11, true, false);
+            forward(0.6, 11, true, false);
+            PIDrotate(0, 0.8);
+            trigger();
+            trigger();
+            intake(0, 0);
+
+
+
+        }
+
+        if(getQuadRing) {
+            strafeLeft(0.7, 7, true, false);
+            forward(0.85, 54, true, false);
+            sleep(50);
+            strafeRight(0.6, 19, true, false);
+            shooter(0.65);
+            arm(0.8, 1325);
+            grabOpen();
+            arm(0.8, -1100);
+            backward(0.9, 24, true, false);
+            // strafeLeft(0.5,3.5);
+            intake(0.3, 1);
+            strafeLeft(0.6, 5, true, false);
+            sleep(200);
+            PIDrotate(0, 0.8);
+            trigger();
+            trigger();
+            trigger();
+            trigger();
+
+
+            backward(0.3, 10, true, false);
+            PIDrotate(0, 0.9);
+            forward(0.9, 8.5, true, false);
+            sleep(100);
+            PIDrotate(0, 1);
+            trigger();
+            trigger();
+            trigger();
+            backward(0.4, 19, true, false);
+            PIDrotate(0, 0.9);
+            forward(0.9, 17.5, true, false );
+            sleep(200);
+            PIDrotate(0, 1);
+            trigger();
+            trigger();
+            sleep(100);
+            trigger();
+            forward(0.9, 2, false, false);
+            intake(0, 0);
+
+        }
+
+
+    }
+    public void OneWBNoIntakeRightRed(boolean single)
+    {
+        if(single){
+            shooter(.65);
+            forward(0.4,27,true,false); // go deliver wobble goal
+            PIDrotate(9, 1); //shooting the ring at an angle for high goal
+            trigger();
+            trigger();
+            trigger();
+            PIDrotate(0, 1);
+            shooter(0);
+            forward(0.4,17.5,true,false);
+
+            PIDrotate(130,1);
+
+            arm(0.8, 1325);
+            sleep(100);
+            grabOpen();
+            arm(0.8, -1100);
+
+
+
+            PIDrotate(0,.4);
+            strafeRight(.7, 6, true, false);
+            backward(0.7,9,true,false);
+            sleep(500);
+
+
+        }
+        else{
+            shooter(.65);
+            forward(0.4,27,true,false); // go deliver wobble goal
+            PIDrotate(9, 1); //shooting the ring at an angle for high goal
+            trigger();
+            trigger();
+            trigger();
+            PIDrotate(0, 1);
+            shooter(0);
+            forward(0.4,29,true,false);
+
+
+
+            arm(0.8, 1325);
+            sleep(100);
+            grabOpen();
+            arm(0.8, -1100);
+
+
+
+
+
+            backward(0.7,22,true,false);
+            sleep(500);
+        }
+
+
+
+
+
+
+    }
+    public void tauBlueAutoIntake()
+    {
+        shooter(.65);
+        strafeRight(0.4,9.6,true, false); //This segment is for the RI=GHT BLUE TAPE
+        forward(0.7,26,false,false);
+        PIDrotate(19.5, 1); //shooting the ring at an angle for high goal
+        trigger();
+        trigger();
+        trigger();
         PIDrotate(0, 1);
+
+        strafeLeft(0.4,15.3,true,true);
+        sleep(500);
+
+
+        intake(.6,1);
+        backward(0.2, 11.5, true, true); //getting the single ring
+        forward(0.6, 10.5, true, true);
         trigger();
         trigger();
         trigger();
-        backward(0.6, 19, true, false);
-        PIDrotate(0, 0.9);
-        forward(0.9, 17.5, true, true);
-        sleep(200);
+        backward(0.3,15, true, true);
+        forward(0.5,14,true,true);
+        trigger();trigger();sleep(300);trigger();
+        forward(0.9,4,true, false);
+        shooter(0);
+
+    }
+    public void tauSingle(){
+        shooter(.65);
+        strafeRight(0.4,9.6,true, false); //This segment is for the RI=GHT BLUE TAPE
+        forward(0.7,26,false,false);
+        PIDrotate(19.5, 1); //shooting the ring at an angle for high goal
+        trigger();
+        trigger();
+        trigger();
         PIDrotate(0, 1);
+
+        strafeLeft(0.4,15.3,true,true);
+        sleep(500);
+
+
+        intake(.6,1);
+        backward(0.2, 11.5, true, true); //getting the single ring
+        forward(0.6, 10.5, true, true);
         trigger();
         trigger();
-        sleep(100);
         trigger();
-        forward(0.9, 6, false, false);
-        intake(0, 0);
+        forward(0.9,4,true, false);
+        shooter(0);
+
     }
     public void nullRightBlueAuto(boolean getSingleRing, boolean getQuadRing, boolean powerShots)
     {
 
-        strafeRight(0.4,3.5,true, false); //This segment is for the RI=GHT BLUE TAPE
-        forward(0.7,30,false,false);
+        strafeRight(0.4,3.5,false, false); //This segment is for the RI=GHT BLUE TAPE
+        forward(0.7,29,false,false);
+
         if(powerShots) shooter(0.45); //power for power shots
         else
-            shooter(0.63);
+            shooter(0.6);
         if(powerShots)
         {
             PIDrotate(6,1); trigger();
@@ -338,15 +580,16 @@ public class Autonomous_Methods extends LinearOpMode {
                 trigger();trigger();sleep(300);trigger();
             }
         }
-        strafeRight(0.5, 12, false, false); //move out of the way and park
-        forward(0.9,6.8,true, false);
+
+        forward(0.9,4,true, false);
         shooter(0);
+
     }
     public void tausBlueAuto()
     {
 
-        //This segment is for the  RIGHT wheel on RIgHT BLUE TAPE
-        shooter(.63);
+         //This segment is for the  RIGHT wheel on RIgHT BLUE TAPE
+        shooter(.65);
         forward(0.7,27,true,false); // go deliver wobble goal
         PIDrotate(16, 1); //shooting the ring at an angle for high goal
         trigger();
@@ -366,24 +609,78 @@ public class Autonomous_Methods extends LinearOpMode {
 
         PIDrotate(0,.4);
         strafeRight(.7, 14, true, false);
-        backward(0.7,26,true,false);
+        backward(0.7,20,true,false);
         sleep(500);
-        intake(1,0.6);shooter(0.65);
 
-        strafeLeft(.7, 10, true, false);
-        sleep(500);
+
+
+
+       // strafeRight(0.5, 12, false, false); //move out of the way and park
+        //forward(0.9,6.8,true, false);
+        //shooter(0);
+    }
+    public void SABlueZero()
+    {
+
+        sleep(5000);
+        strafeLeft(0.5, 16, true,false);
+        forward(0.6,27, true, false);
+        PIDrotate(90, 0.2);
+
+        arm(0.8, 1325);
+        grabOpen();
+        arm(0.8, -1100);
+
+
+
+        //PIDrotate(0,.1);
+        shooter(.66);
+        sleep(1000);
+        PIDrotate(-10,.2);
+        trigger();
+        trigger();
+        trigger();
+        shooter(0);
+
+
+    }
+    public void SABlueSingle(){
+        sleep(5000);
+        strafeLeft(0.5, 18, true,false);
+        forward(0.6,29, true, false);
+
+        shooter(.65);
+        sleep(1000);
+        PIDrotate(-12,.4);
+        trigger();
+        trigger();
+        trigger();
+        strafeRight(0.5, 12, true,false);
+        intake(.6,1);
         backward(0.4, 9, true, true); //getting the single ring
         forward(0.7, 8, true, true);
         trigger();
         trigger();
         trigger();
-        backward(0.4,20, true, true);
-        forward(0.8,19,true,true);
-        trigger();trigger();sleep(300);trigger();
+        intake(0,0);
+        forward(.4,5,true,false);
+        strafeLeft(0.5, 9, true,false);
 
-        // strafeRight(0.5, 12, false, false); //move out of the way and park
-        //forward(0.9,6.8,true, false);
-        //shooter(0);
+    }
+    public void RightRedAutoShootAndPark()
+
+    {
+        shooter(0.64);
+        strafeRight(0.5,2.5,true, false); //This segment is for the LEFT RED TAPE
+        forward(0.4,29,true,false);
+        PIDrotate(-17, 1); //shooting the ring at an angle for high goal
+        trigger();
+        trigger();
+        trigger();
+        PIDrotate(0, 1);
+        shooter(0);
+        forward(0.7,4,false,false);
+
     }
     public void nullInnerTapeAuto(String alliance, boolean getSingleRing, boolean getQuadRing, boolean powerShots)
     {
@@ -503,6 +800,7 @@ public class Autonomous_Methods extends LinearOpMode {
     }
     public void reverseNoneRed(boolean startPos){
         if(startPos == true){
+            //centered on left red tape
 
             shooter(0.65);
             forward(0.65, 28, true, false);
@@ -524,6 +822,7 @@ public class Autonomous_Methods extends LinearOpMode {
 
         }
         else{
+            //centered on right red tape
 
             forward(0.65, 12, true, false);
             strafeLeft(0.4, 8, true, false);
@@ -591,118 +890,6 @@ public class Autonomous_Methods extends LinearOpMode {
             arm(0.6, -320);
 
         }
-
-    }
-
-    public void autoRedCarry( boolean getSingleRing1WG, boolean getQuadRing, boolean getZeroRing) {
-
-
-        if(getZeroRing) {
-
-            shooter(0.65);
-            forward(0.7, 28, true, false);
-            strafeRight(0.7, 5.5, true, false);
-            trigger();
-            trigger();
-            trigger();
-            shooter(0);
-            forward(0.65, 6, true, false);
-            strafeRight(0.65, 6.5, true, false);
-            arm(0.6, 1325);
-            grabOpen();
-            sleep(100);
-            arm(0.6, -320);
-            strafeLeft(0.7, 9.75, true, false);
-            backward(0.7, 28.5, true, false);
-            arm(0.6, 310);
-            forward(0.1, 2, true, false);
-            grabClose();
-            sleep(200);
-            forward(0.7, 29.5, true, false);
-            strafeRight(0.7, 7.5, true, false);
-            grabOpen();
-            arm(0.6, -950);
-            sleep(200);
-            strafeLeft(0.6, 6, false, false);
-            grabOpen();
-
-        }
-
-        if(getSingleRing1WG) {
-
-            strafeLeft(0.9, 5.5, true, false);
-//          forward(0.5, 44);
-            forward(0.9, 44, true, false);
-            strafeRight(0.6, 5, true, false);
-            shooter(0.65);
-            arm(0.9, 1325);
-            sleep(100);
-            grabOpen();
-            arm(0.9, -440);
-            backward(0.7, 14, true, false);
-            strafeRight(0.7, 4, true, false);
-            intake(0.2, 1);
-            PIDrotate(0, 1);
-            sleep(200);
-            trigger();
-            sleep(200);
-            trigger();
-            sleep(200);
-            trigger();
-            backward(0.6, 11, true, false);
-            forward(0.6, 11, true, false);
-            PIDrotate(0, 0.8);
-            trigger();
-            trigger();
-            intake(0, 0);
-            forward (1, 2, false, false);
-
-        }
-
-        if(getQuadRing) {
-
-
-            strafeLeft(0.7, 5.5, true, false);
-            forward(0.85, 52, true, false);
-            sleep(50);
-            strafeRight(0.6, 19, true, false);
-            shooter(0.65);
-            arm(0.8, 1325);
-            grabOpen();
-            arm(0.8, -1100);
-            backward(0.9, 23.5, true, false);
-            // strafeLeft(0.5,3.5);
-            intake(0.3, 1);
-            strafeLeft(0.6, 5, true, false);
-            sleep(200);
-            PIDrotate(0, 0.8);
-            trigger();
-            trigger();
-            trigger();
-            trigger();
-            backward(0.6, 5.5, true, false);
-
-            backward(0.3, 6, true, true);
-            PIDrotate(0, 0.9);
-            forward(0.9, 9.5, true, true);
-            sleep(100);
-            PIDrotate(0, 1);
-            trigger();
-            trigger();
-            trigger();
-            backward(0.6, 19, true, false);
-            PIDrotate(0, 0.9);
-            forward(0.9, 17.5, true, true);
-            sleep(200);
-            PIDrotate(0, 1);
-            trigger();
-            trigger();
-            sleep(100);
-            trigger();
-            forward(0.9, 6, false, false);
-            intake(0, 0);
-        }
-
 
     }
 
@@ -1110,12 +1297,12 @@ public class Autonomous_Methods extends LinearOpMode {
 
     public void grabOpen() {
 
-        robot.grab.setPosition(0.7);
+        robot.grab.setPosition(0.2);
     }
 
     public void grabClose() {
 
-        robot.grab.setPosition(1);
+        robot.grab.setPosition(0.7);
     }
 
 
@@ -1124,5 +1311,6 @@ public class Autonomous_Methods extends LinearOpMode {
 
     }
 }
+
 
 
